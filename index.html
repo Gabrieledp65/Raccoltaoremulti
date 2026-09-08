@@ -1,0 +1,478 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Foglio Ore — Cedolino CCNL Metalmeccanici D2</title>
+<style>
+:root{--bg:#f5f7f6;--card:#fff;--ink:#17312a;--muted:#65756f;--line:#dfe7e3;--green:#1f8f5b;--green2:#16734a;--red:#c83d3d;--red2:#a72f2f;--blue:#2868b2;--yellow:#b88416;--shadow:0 8px 24px rgba(25,55,45,.08)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif}button,input,select{font:inherit}.wrap{max-width:900px;margin:auto;padding:18px}.hidden{display:none!important}.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}.top h1{margin:0;font-size:25px}.tab{font-size:12px;color:var(--muted)}.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;margin:12px 0;box-shadow:var(--shadow)}.field{display:flex;flex-direction:column;gap:6px;flex:1}.field label{font-size:12px;font-weight:700;color:var(--muted)}input,select{width:100%;border:1px solid var(--line);border-radius:11px;padding:11px 12px;background:#fff;color:var(--ink)}.field-row{display:flex;gap:12px;margin-bottom:12px}.btn-row{display:flex;gap:10px;flex-wrap:wrap}.btn-row>*{flex:1}.btn{border:0;border-radius:12px;padding:12px 14px;font-weight:800;cursor:pointer;transition:transform .09s,box-shadow .12s,filter .12s,background .12s}.btn:active,.btn-pressed{transform:translateY(2px) scale(.985);box-shadow:inset 0 3px 7px rgba(0,0,0,.18)!important;filter:brightness(.9)}.btn:disabled{opacity:.55;cursor:not-allowed}.btn-clicked{filter:brightness(1.12);box-shadow:0 0 0 3px rgba(31,143,91,.22),0 5px 12px rgba(0,0,0,.12)!important}.btn-primary{background:var(--green);color:#fff;box-shadow:0 4px 10px rgba(31,143,91,.22)}.btn-danger{background:var(--red);color:#fff;box-shadow:0 4px 10px rgba(200,61,61,.2)}.btn-secondary{background:#eef3f0;color:var(--ink);box-shadow:0 3px 8px rgba(0,0,0,.06)}.btn-blue{background:var(--blue);color:#fff}.btn-yellow{background:#d5a331;color:#fff}.btn-link{background:none;border:0;color:var(--blue);font-weight:700;cursor:pointer}.login-card{max-width:500px;margin:6vh auto}.login-title{text-align:center;margin-bottom:18px}.login-title h1{margin:0 0 4px}.login-title p{margin:0;color:var(--muted);font-size:13px}.error{display:none;background:#fff0f0;border:1px solid #f1cccc;color:#9e2525;padding:10px;border-radius:10px;margin-bottom:12px;font-size:13px}.error.show{display:block}.state{border-radius:16px;padding:18px;text-align:center;margin-bottom:14px;border:1px solid var(--line);background:#f9fbfa}.state .big{font-size:22px;font-weight:900}.state .small{font-size:12px;color:var(--muted);margin-top:4px}.action-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.action{min-height:68px;font-size:15px}.action.green{background:var(--green);color:#fff}.action.red{background:var(--red);color:#fff}.action.blue{background:var(--blue);color:#fff}.action.yellow{background:#d5a331;color:#fff}.action.gray{background:#eef3f0;color:var(--ink)}.timeline{display:flex;flex-direction:column;gap:8px}.event{display:grid;grid-template-columns:76px 34px 1fr;align-items:center;border-bottom:1px solid var(--line);padding:9px 0}.event:last-child{border-bottom:0}.event .time{font-weight:800}.event .ico{font-size:19px}.event .desc{font-size:13px}.event .sub{font-size:11px;color:var(--muted)}.badge{display:inline-block;padding:4px 8px;border-radius:999px;background:#edf3f0;font-size:11px;font-weight:800}.badge.outside{background:#fff1d2;color:#855e08}.badge.travel{background:#eaf2fb;color:#20548d}.badge.work{background:#e8f6ef;color:#176a44}.badge.break{background:#fff5dd;color:#7e5d13}.month-toggle{display:flex;gap:6px;align-items:center;justify-content:center;margin:10px 0}.month-toggle button{border:1px solid var(--line);border-radius:10px;background:#fff;padding:8px 12px;cursor:pointer;font-weight:800}.month-toggle .month-main{min-width:150px}.table-wrap{overflow:auto}table{width:100%;border-collapse:collapse;font-size:12px}th,td{padding:9px 7px;border-bottom:1px solid var(--line);text-align:left;white-space:nowrap}th{font-size:11px;color:var(--muted)}.num{text-align:right}th.valcol,td.valcol{width:15%;text-align:center}th.valcol .th-ico{display:block;font-size:15px;line-height:1.15}th.valcol .th-lbl{display:block;font-size:9px;font-weight:800;color:var(--muted);margin-top:2px;letter-spacing:.2px}tfoot td{border-bottom:0;border-top:2px solid var(--line);font-weight:900;font-size:12px}tfoot .tot-travel{color:var(--blue)}tfoot .tot-work{color:var(--green2)}.empty{padding:18px;text-align:center;color:var(--muted)}.summary-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.summary{border:1px solid var(--line);border-radius:12px;padding:10px}.summary .lbl{font-size:10px;color:var(--muted)}.summary .val{font-size:20px;font-weight:900;margin-top:4px}.summary.total-work{background:#e8f6ef;border-color:#bfe4d0}.summary.total-work .val{color:var(--green2)}.summary.total-travel{background:#eaf2fb;border-color:#c6dcf3}.summary.total-travel .val{color:var(--blue)}.session{display:flex;justify-content:space-between;align-items:center;margin:8px 0;color:var(--muted);font-size:12px}.modal{position:fixed;inset:0;background:rgba(0,0,0,.4);display:none;align-items:center;justify-content:center;padding:20px;z-index:20}.modal.show{display:flex}.modal-box{background:#fff;border-radius:18px;max-width:520px;width:100%;padding:18px;box-shadow:0 20px 50px rgba(0,0,0,.2);max-height:calc(100vh - 40px);max-height:calc(100dvh - 40px);display:flex;flex-direction:column}.modal-box h3{margin-top:0;flex:0 0 auto}#modalBody{overflow-y:auto;-webkit-overflow-scrolling:touch;flex:1 1 auto;min-height:0}#modalButtons{flex:0 0 auto}.admin-user{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--line);padding:10px 0;gap:10px}.admin-user:last-child{border-bottom:0}.btn-loading{position:relative}.btn-loading:after{content:"";display:inline-block;width:12px;height:12px;margin-left:8px;border:2px solid currentColor;border-right-color:transparent;border-radius:50%;vertical-align:-2px;animation:spin .7s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}.rtl{direction:rtl}.rtl .top,.rtl .session{flex-direction:row-reverse}.rtl table{text-align:right}.rtl .num{text-align:left}.rtl .event{grid-template-columns:76px 34px 1fr}.hint{font-size:11px;color:var(--muted)}.payroll-head{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.payroll-box{border:1px solid var(--line);border-radius:12px;padding:10px;background:#fbfcfb}.payroll-box .lbl{font-size:10px;color:var(--muted)}.payroll-box .val{font-size:18px;font-weight:900;margin-top:3px}.payroll-net{background:#e8f6ef;border-color:#bfe4d0}.payroll-net .val{color:var(--green2);font-size:24px}.payroll-section{margin-top:14px}.payroll-row{display:flex;justify-content:space-between;gap:12px;padding:7px 0;border-bottom:1px solid var(--line);font-size:13px}.payroll-row strong{font-weight:900}.payroll-note{font-size:10px;color:var(--muted);margin-top:10px}@media(max-width:600px){.payroll-head{grid-template-columns:1fr 1fr}.payroll-net{grid-column:1/-1}}@media(max-width:600px){.field-row{flex-direction:column}.action-grid{grid-template-columns:1fr}.summary-grid{grid-template-columns:repeat(2,1fr)}.wrap{padding:12px}.top h1{font-size:21px}.action{min-height:62px}}
+</style>
+</head>
+<body>
+<div class="wrap" id="loginView">
+  <div class="card login-card">
+    <div class="login-title"><h1>Foglio Ore</h1><p id="loginSubtitle">Accedi o crea il tuo profilo</p></div>
+    <div class="error" id="loginError"></div>
+    <div class="field-row"><div class="field"><label id="lblUsername">Nome utente</label><input id="loginUser" autocomplete="username"></div><div class="field"><label id="lblPassword">Password</label><input id="loginPass" type="password" autocomplete="current-password"></div></div>
+    <div class="field" style="margin-bottom:12px"><label id="lblLanguage">Lingua</label><select id="languageSelect"><option value="it">Italiano</option><option value="en">English</option><option value="fr">Français</option><option value="ar">العربية</option></select></div>
+    <button class="btn btn-primary" id="loginBtn">Accedi / Registrati</button>
+    <p class="hint" id="loginHint" style="margin-bottom:0">Il nome utente "admin" è riservato.</p>
+  </div>
+</div>
+
+<div class="wrap hidden" id="appView">
+  <div class="top"><h1>Foglio Ore</h1><span class="tab" id="todayTab"></span></div>
+  <div class="session"><span id="sessionUser"></span><span><button class="btn-link" id="settingsBtn">⚙️</button> <button class="btn-link" id="logoutBtn">Logout</button></span></div>
+  <div class="card">
+    <div class="state" id="stateBox"><div class="big" id="stateTitle">Non in servizio</div><div class="small" id="stateSub">—</div></div>
+    <div class="action-grid" id="actions"></div>
+  </div>
+  <div class="card"><h3 id="todayTitle" style="margin-top:0">Oggi</h3><div class="timeline" id="todayTimeline"></div></div>
+  <div class="card"><div class="month-toggle"><button id="prevMonth">‹</button><button class="month-main" id="monthMain">Agosto 2026</button><button id="nextMonth">›</button><button id="currentMonth">↩</button></div><div class="table-wrap" id="historyTable"></div></div>
+  <div class="card"><div class="btn-row"><button class="btn btn-secondary" id="summaryBtn">Riepilogo ore</button><button class="btn btn-yellow" id="pdfStimaBtn">Cedolino</button></div></div>
+</div>
+
+<div class="wrap hidden" id="adminView">
+  <div class="top"><h1>Pannello Admin</h1><span class="tab">amministratore</span></div>
+  <div class="session"><span id="adminSession"></span><button class="btn-link" id="adminLogout">Logout</button></div>
+  <div class="card"><h3 style="margin-top:0">Utenti</h3><div id="adminUsers"></div></div>
+  <div class="hidden" id="adminReport"><div class="card"><button class="btn btn-secondary" id="adminBack">← Elenco utenti</button><h3 id="adminTitle">Report</h3><div class="month-toggle"><button id="adminPrev">‹</button><button class="month-main" id="adminMonthMain">Mese</button><button id="adminNext">›</button><button id="adminCurrent">↩</button></div><div class="table-wrap" id="adminHistory"></div></div><div class="card"><div class="btn-row"><button class="btn btn-secondary" id="adminSummary">Riepilogo</button><button class="btn btn-primary" id="adminPdf">Scarica PDF</button></div></div></div>
+</div>
+
+<div class="modal" id="modal"><div class="modal-box"><h3 id="modalTitle"></h3><div id="modalBody"></div><div class="btn-row" style="margin-top:15px" id="modalButtons"></div></div></div>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
+import { getFirestore, collection, doc, getDoc, setDoc, updateDoc, addDoc, deleteDoc, onSnapshot, query, where, writeBatch, serverTimestamp, getDocs } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
+import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
+import { getFunctions, httpsCallable } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-functions.js";
+
+const firebaseConfig={apiKey:"AIzaSyDdXX4xF91oAu391nwwKLCVFo8neFcUTIA",authDomain:"gestione-ore-7eba2.firebaseapp.com",projectId:"gestione-ore-7eba2",storageBucket:"gestione-ore-7eba2.firebasestorage.app",messagingSenderId:"812093171455",appId:"1:812093171455:web:1e5a6562e452ece5248eca",measurementId:"G-EQS244EXN3"};
+const app=initializeApp(firebaseConfig),db=getFirestore(app),auth=getAuth(app),functions=getFunctions(app);
+const usersCol=collection(db,"utenti"),entriesCol=collection(db,"entries");
+const SESSION_KEY="foglio_ore_session_v3";
+const DAYS={it:["Domenica","Lunedì","Martedì","Mercoledì","Giovedì","Venerdì","Sabato"],en:["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],fr:["Dimanche","Lundi","Mardi","Mercredi","Jeudi","Vendredi","Samedi"],ar:["الأحد","الاثنين","الثلاثاء","الأربعاء","الخميس","الجمعة","السبت"]};
+const MONTHS={it:["Gennaio","Febbraio","Marzo","Aprile","Maggio","Giugno","Luglio","Agosto","Settembre","Ottobre","Novembre","Dicembre"],en:["January","February","March","April","May","June","July","August","September","October","November","December"],fr:["Janvier","Février","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Décembre"],ar:["يناير","فبراير","مارس","أبريل","مايو","يونيو","يوليو","أغسطس","سبتمبر","أكتوبر","نوفمبر","ديسمبر"]};
+const T={it:{login:"Accedi / Registrati",user:"Nome utente",pass:"Password",lang:"Lingua",subtitle:"Accedi o crea il tuo profilo",not:"Non in servizio",work:"Lavoro in corso",break:"In pausa",travel:"In viaggio",outside:"Fuori sede",startWork:"🟢 Inizio lavoro",startTravel:"🚚 Inizia viaggio",startBreak:"☕ Inizia pausa",resume:"▶️ Riprendi lavoro",endWork:"🔴 Fine lavoro",endTravel:"🏠 Fine viaggio / rientro",outsideStart:"🏨 Inizia fuori sede",overnight:"🏨 Pernottamento",finishDay:"🏁 Chiudi giornata",finishOutside:"🏠 Fine fuori sede / rientro",summary:"Riepilogo ore",pdf:"Scarica PDF",logout:"Logout",today:"Oggi",saved:"Registrato",noData:"Nessun dato",travelHours:"Ore viaggio",workHours:"Ore lavoro",breakHours:"Pause",outsideDays:"Giorni fuori sede",workDays:"Giorni lavorati",totalHours:"Ore totali",totalWorkHours:"Totale Ore Lavoro",totalTravelHours:"Totale Ore Viaggio",colTravel:"Viaggio",colWork:"Lavoro",colBreak:"Pausa",colOutside:"Fuori sede",colTotal:"Totale",deleteMonth:"Elimina mese",deleteUser:"Elimina utente",changePassword:"Modifica password",open:"Apri",back:"← Elenco utenti",saving:"Salvataggio…",settings:"Impostazioni",payRates:"Tariffe e paga",lblHourlyRate:"Tariffa oraria (€)",lblTravelPct:"% tariffa per le ore di viaggio",lblOvertimePct:"% maggiorazione straordinario",lblAllowance:"Indennità per notte fuori (€)",save:"Salva",cancel:"Annulla",colPay:"Paga",totalPay:"Totale Paga",payBreakdown:"Dettaglio paga",payOrdinary:"Ordinario",payOvertime:"Straordinario",payTravel:"Viaggio",payAllowance:"Indennità",nightsAway:"Notti fuori",editDay:"Correggi giornata",addEvent:"Aggiungi evento",pdfHours:"Scarica PDF",pdfStima:"Cedolino",timeCol:"Ora",typeCol:"Evento",colDay:"Diurno",colNight:"Notturno",payOrdinaryDay:"Ordinario diurno",payOrdinaryNight:"Ordinario notturno",payOvertimeDay:"Straordinario diurno",payOvertimeNight:"Straordinario notturno",totalWorkDay:"Totale Ore Diurne",totalWorkNight:"Totale Ore Notturne"},en:{login:"Login / Register",user:"Username",pass:"Password",lang:"Language",subtitle:"Sign in or create your profile",not:"Not working",work:"Working",break:"On break",travel:"Travelling",outside:"Away",startWork:"🟢 Start work",startTravel:"🚚 Start travel",startBreak:"☕ Start break",resume:"▶️ Resume work",endWork:"🔴 End work",endTravel:"🏠 End travel / return",outsideStart:"🏨 Start away period",overnight:"🏨 Overnight stay",finishDay:"🏁 Close day",finishOutside:"🏠 End away period / return",summary:"Summary",pdf:"Download PDF",logout:"Logout",today:"Today",saved:"Recorded",noData:"No data",travelHours:"Travel hours",workHours:"Work hours",breakHours:"Breaks",outsideDays:"Away days",workDays:"Worked days",totalHours:"Total hours",totalWorkHours:"Total Work Hours",totalTravelHours:"Total Travel Hours",colTravel:"Travel",colWork:"Work",colBreak:"Break",colOutside:"Away",colTotal:"Total",deleteMonth:"Delete month",deleteUser:"Delete user",changePassword:"Change password",open:"Open",back:"← Users",saving:"Saving…",settings:"Settings",payRates:"Rates & pay",lblHourlyRate:"Hourly rate (€)",lblTravelPct:"% rate for travel hours",lblOvertimePct:"% overtime surcharge",lblAllowance:"Allowance per night away (€)",save:"Save",cancel:"Cancel",colPay:"Pay",totalPay:"Total Pay",payBreakdown:"Pay breakdown",payOrdinary:"Ordinary",payOvertime:"Overtime",payTravel:"Travel",payAllowance:"Allowance",nightsAway:"Nights away",editDay:"Correct day",addEvent:"Add event",pdfHours:"Download PDF",pdfStima:"Estimated pay",timeCol:"Time",typeCol:"Event",colDay:"Day",colNight:"Night",payOrdinaryDay:"Ordinary day",payOrdinaryNight:"Ordinary night",payOvertimeDay:"Overtime day",payOvertimeNight:"Overtime night",totalWorkDay:"Total Day Hours",totalWorkNight:"Total Night Hours"},fr:{login:"Connexion / Inscription",user:"Nom d’utilisateur",pass:"Mot de passe",lang:"Langue",subtitle:"Connectez-vous ou créez votre profil",not:"Hors service",work:"Au travail",break:"En pause",travel:"En déplacement",outside:"Hors site",startWork:"🟢 Début du travail",startTravel:"🚚 Début du déplacement",startBreak:"☕ Début de pause",resume:"▶️ Reprendre",endWork:"🔴 Fin du travail",endTravel:"🏠 Fin du déplacement / retour",outsideStart:"🏨 Début hors site",overnight:"🏨 Nuitée",finishDay:"🏁 Fermer la journée",finishOutside:"🏠 Fin hors site / retour",summary:"Résumé",pdf:"Télécharger PDF",logout:"Déconnexion",today:"Aujourd’hui",saved:"Enregistré",noData:"Aucune donnée",travelHours:"Heures de déplacement",workHours:"Heures de travail",breakHours:"Pauses",outsideDays:"Jours hors site",workDays:"Jours travaillés",totalHours:"Heures totales",totalWorkHours:"Total Heures de travail",totalTravelHours:"Total Heures de déplacement",colTravel:"Déplacement",colWork:"Travail",colBreak:"Pause",colOutside:"Hors site",colTotal:"Total",deleteMonth:"Supprimer le mois",deleteUser:"Supprimer l’utilisateur",changePassword:"Modifier le mot de passe",open:"Ouvrir",back:"← Utilisateurs",saving:"Enregistrement…",settings:"Paramètres",payRates:"Tarifs et paie",lblHourlyRate:"Taux horaire (€)",lblTravelPct:"% du taux pour les heures de déplacement",lblOvertimePct:"% de majoration heures sup.",lblAllowance:"Indemnité par nuit hors domicile (€)",save:"Enregistrer",cancel:"Annuler",colPay:"Paie",totalPay:"Total Paie",payBreakdown:"Détail de la paie",payOrdinary:"Ordinaire",payOvertime:"Heures sup.",payTravel:"Déplacement",payAllowance:"Indemnité",nightsAway:"Nuits hors domicile",editDay:"Corriger la journée",addEvent:"Ajouter un événement",pdfHours:"Télécharger PDF",pdfStima:"Estimation de salaire",timeCol:"Heure",typeCol:"Événement",colDay:"Jour",colNight:"Nuit",payOrdinaryDay:"Ordinaire jour",payOrdinaryNight:"Ordinaire nuit",payOvertimeDay:"Heures sup. jour",payOvertimeNight:"Heures sup. nuit",totalWorkDay:"Total Heures de jour",totalWorkNight:"Total Heures de nuit"},ar:{login:"تسجيل الدخول / التسجيل",user:"اسم المستخدم",pass:"كلمة المرور",lang:"اللغة",subtitle:"سجّل الدخول أو أنشئ ملفك",not:"خارج العمل",work:"في العمل",break:"استراحة",travel:"في الطريق",outside:"خارج الموقع",startWork:"🟢 بدء العمل",startTravel:"🚚 بدء السفر",startBreak:"☕ بدء الاستراحة",resume:"▶️ استئناف",endWork:"🔴 نهاية العمل",endTravel:"🏠 نهاية السفر / العودة",outsideStart:"🏨 بدء فترة خارج الموقع",overnight:"🏨 مبيت",finishDay:"🏁 إغلاق اليوم",finishOutside:"🏠 إنهاء الفترة / العودة",summary:"الملخص",pdf:"تنزيل PDF",logout:"تسجيل الخروج",today:"اليوم",saved:"تم التسجيل",noData:"لا توجد بيانات",travelHours:"ساعات السفر",workHours:"ساعات العمل",breakHours:"الاستراحات",outsideDays:"أيام خارج الموقع",workDays:"أيام العمل",totalHours:"إجمالي الساعات",totalWorkHours:"إجمالي ساعات العمل",totalTravelHours:"إجمالي ساعات السفر",colTravel:"السفر",colWork:"العمل",colBreak:"استراحة",colOutside:"خارج الموقع",colTotal:"الإجمالي",deleteMonth:"حذف الشهر",deleteUser:"حذف المستخدم",changePassword:"تعديل كلمة المرور",open:"فتح",back:"← المستخدمون",saving:"جارٍ الحفظ…",settings:"الإعدادات",payRates:"الأجور والتعرفات",lblHourlyRate:"الأجر بالساعة (€)",lblTravelPct:"% من الأجر لساعات السفر",lblOvertimePct:"% علاوة الساعات الإضافية",lblAllowance:"بدل عن كل ليلة خارج المنزل (€)",save:"حفظ",cancel:"إلغاء",colPay:"الأجر",totalPay:"إجمالي الأجر",payBreakdown:"تفاصيل الأجر",payOrdinary:"عادي",payOvertime:"ساعات إضافية",payTravel:"سفر",payAllowance:"بدل",nightsAway:"ليالٍ خارج المنزل",editDay:"تصحيح اليوم",addEvent:"إضافة حدث",pdfHours:"تنزيل PDF",pdfStima:"تقدير الراتب",timeCol:"الوقت",typeCol:"الحدث",colDay:"نهاري",colNight:"ليلي",payOrdinaryDay:"عادي نهاري",payOrdinaryNight:"عادي ليلي",payOvertimeDay:"إضافي نهاري",payOvertimeNight:"إضافي ليلي",totalWorkDay:"إجمالي ساعات النهار",totalWorkNight:"إجمالي ساعات الليل"}};
+
+let lang="it",session=null,myEvents=[],myAbsences=[],outsidePeriods=[],unsub=null,adminUser=null,adminEvents=[],adminAbsences=[],adminPeriods=[],unsubAdmin=null,monthYM=currentYM(),adminMonthYM=currentYM();
+const $=id=>document.getElementById(id);
+window.addEventListener("error",e=>{console.error("Errore applicazione:",e.error||e.message);const box=$("loginError");if(box&&(!session||session.role!=="user")){box.textContent="Errore applicazione: "+(e.message||"errore JavaScript");box.classList.add("show");}});
+window.addEventListener("unhandledrejection",e=>{console.error("Errore applicazione:",e.reason);});
+function todayISO(){let d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")}
+function parseDate(s){let p=s.split("-");return new Date(+p[0],+p[1]-1,+p[2])}
+function nowHM(){let d=new Date();return String(d.getHours()).padStart(2,"0")+":"+String(d.getMinutes()).padStart(2,"0")}
+function dayName(iso){return DAYS[lang][parseDate(iso).getDay()]}
+function currentYM(){return todayISO().slice(0,7)}
+function shiftYM(ym,n){let [y,m]=ym.split("-").map(Number);m+=n;while(m<1){m+=12;y--}while(m>12){m-=12;y++}return y+"-"+String(m).padStart(2,"0")}
+function ymLabel(ym){let [y,m]=ym.split("-");return MONTHS[lang][+m-1]+" "+y}
+function fmtMin(min){min=Math.max(0,Math.round(min||0));return Math.floor(min/60)+":"+String(min%60).padStart(2,"0")}
+function fmtEUR(v){return(Math.round((v||0)*100)/100).toFixed(2)+" €"}
+function minDiff(a,b){let [ah,am]=a.split(":").map(Number),[bh,bm]=b.split(":").map(Number);let x=(bh*60+bm)-(ah*60+am);return x<0?x+1440:x}
+function safe(s){return String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
+function syntheticEmail(username){return username.trim().toLowerCase().replace(/[^a-z0-9._-]/g,"_")+"@gestione-ore.local"}
+function saveSession(){localStorage.setItem(SESSION_KEY,JSON.stringify(session))}
+function loadSession(){try{return JSON.parse(localStorage.getItem(SESSION_KEY))}catch{return null}}
+function clearSession(){localStorage.removeItem(SESSION_KEY)}
+function feedbackButton(b){if(!b||b.dataset.feedbackBound)return;b.dataset.feedbackBound="1";b.addEventListener("pointerdown",()=>{if(!b.disabled){b.classList.add("btn-pressed");setTimeout(()=>b.classList.remove("btn-pressed"),220)}});b.addEventListener("click",()=>{if(!b.disabled){b.classList.add("btn-clicked");setTimeout(()=>b.classList.remove("btn-clicked"),350)}})}
+function feedback(){document.querySelectorAll("button").forEach(feedbackButton)}
+function setLoading(b,t){if(!b)return;b.dataset.old=b.textContent;b.textContent=t;b.disabled=true;b.classList.add("btn-loading")}
+function clearLoading(b){if(!b)return;if(b.dataset.old)b.textContent=b.dataset.old;b.disabled=false;b.classList.remove("btn-loading")}
+function setLang(l){lang=l||"it";document.documentElement.lang=lang;document.body.classList.toggle("rtl",lang==="ar");let t=T[lang];$("loginBtn").textContent=t.login;$("lblUsername").textContent=t.user;$("lblPassword").textContent=t.pass;$("lblLanguage").textContent=t.lang;$("loginSubtitle").textContent=t.subtitle;$("todayTab").textContent=t.today;$("logoutBtn").textContent=t.logout;$("summaryBtn").textContent=t.summary;$("pdfStimaBtn").textContent=t.pdfStima;renderState();renderToday();renderHistory()}
+function show(view){["loginView","appView","adminView"].forEach(x=>$(x).classList.toggle("hidden",x!==view))}
+function eventOrderKey(e){let c=e&&e.createdAt;return c&&typeof c.seconds==="number"?c.seconds+c.nanoseconds/1e9:0}
+function compareEvents(a,b){return (a.time||"").localeCompare(b.time||"")||(eventOrderKey(a)-eventOrderKey(b))}
+function dayEvents(date){return myEvents.filter(e=>e.date===date).sort(compareEvents)}
+function activeOutside(){return outsidePeriods.find(p=>p.status==="open")||null}
+function eventLabel(e){let map={travel_start:["🚚","Inizio viaggio"],travel_end:["📍","Fine viaggio / arrivo"],work_start:["🟢","Inizio lavoro"],break_start:["☕","Inizio pausa"],break_end:["▶️","Fine pausa / ripresa"],work_end:["🔴","Fine lavoro"],day_end:["🏁","Fine giornata"],overnight:["🏨","Pernottamento"],outside_end:["🏠","Fine fuori sede / rientro"]};return map[e.type]||["•",e.type]}
+const EVENT_TYPES=["work_start","break_start","break_end","work_end","travel_start","travel_end","overnight","day_end","outside_end"];
+function eventTypeLabel(type){return (eventLabel({type}))[1]}
+function editRowHtml(e){let id=e.id||"";let opts=EVENT_TYPES.map(ty=>'<option value="'+ty+'"'+(ty===e.type?" selected":"")+'>'+eventTypeLabel(ty)+"</option>").join("");return '<div class="field-row edit-row" data-id="'+safe(id)+'" style="align-items:flex-end"><div class="field" style="flex:0 0 100px"><label>'+T[lang].timeCol+'</label><input type="time" class="edit-time" value="'+safe(e.time||"")+'"></div><div class="field"><label>'+T[lang].typeCol+'</label><select class="edit-type">'+opts+"</select></div><button type=\"button\" class=\"btn btn-danger edit-del\" style=\"flex:0 0 auto;padding:11px 14px\">🗑</button></div>"}
+function editDay(date){let rows=dayEvents(date),t=T[lang];let body='<div id="editRowsBox">'+rows.map(editRowHtml).join("")+'</div><button type="button" class="btn btn-secondary" id="addRowBtn" style="margin-top:8px;width:100%">+ '+t.addEvent+"</button>";openModal(t.editDay+" — "+date.split("-").reverse().join("/"),body,[[t.save,()=>saveEditDay(date)],[t.cancel,closeModal]]);$("addRowBtn").onclick=()=>{$("editRowsBox").insertAdjacentHTML("beforeend",editRowHtml({time:nowHM(),type:"work_start"}))};$("editRowsBox").addEventListener("click",e=>{if(e.target.classList.contains("edit-del"))e.target.closest(".edit-row").remove()})}
+async function saveEditDay(date){let box=$("editRowsBox"),rowEls=[...box.querySelectorAll(".edit-row")],originalIds=new Set(dayEvents(date).map(e=>e.id)),keptIds=new Set();for(let rowEl of rowEls){let id=rowEl.dataset.id,time=rowEl.querySelector(".edit-time").value,type=rowEl.querySelector(".edit-type").value;if(!time)continue;if(id){keptIds.add(id);let orig=myEvents.find(e=>e.id===id);if(orig&&(orig.time!==time||orig.type!==type))await updateDoc(doc(entriesCol,id),{time,type})}else{await addDoc(entriesCol,{kind:"event",uid:session.uid,usernameLower:session.usernameLower,username:session.username,date,time,type,periodId:null,context:null,createdAt:serverTimestamp()})}}for(let oid of originalIds){if(oid&&!keptIds.has(oid))await deleteDoc(doc(entriesCol,oid))}closeModal()}
+async function addEvent(type,date=todayISO(),extra={}){let e={kind:"event",uid:session.uid,usernameLower:session.usernameLower,username:session.username,date,time:nowHM(),type,periodId:extra.periodId||null,context:extra.context||null,createdAt:serverTimestamp()};await addDoc(entriesCol,e)}
+async function startOutside(){let p={kind:"outsidePeriod",uid:session.uid,usernameLower:session.usernameLower,username:session.username,startDate:todayISO(),startTime:nowHM(),status:"open",endDate:null,endTime:null,createdAt:serverTimestamp()};let ref=await addDoc(entriesCol,p);return ref.id}
+async function closeOutside(){let p=activeOutside();if(!p)return;await updateDoc(doc(entriesCol,p.id),{status:"closed",endDate:todayISO(),endTime:nowHM()});await addEvent("outside_end",todayISO(),{periodId:p.id})}
+function activeEventType(date=todayISO()){let es=dayEvents(date);return es[es.length-1]?.type||null}
+function renderState(){if(!session||session.role==="admin")return;let date=todayISO(),es=dayEvents(date),last=es[es.length-1],outside=activeOutside(),t=T[lang],title=t.not,sub="";if(outside)sub=t.outside+" — "+outside.startDate;if(last){if(last.type==="work_start"||last.type==="break_end")title=t.work;else if(last.type==="break_start")title=t.break;else if(last.type==="travel_start")title=t.travel;sub=(last.type==="work_start"||last.type==="travel_start"?t.saved+" "+last.time:last.time)||sub}$("stateTitle").textContent=title;$("stateSub").textContent=sub;let a=[],type=last?.type||null;if(type==="break_start")a.push(["resume","resume","green"]);else if(type==="work_start"||type==="break_end")a.push(["break_start","startBreak","yellow"],["work_end","endWork","red"]);else if(type==="travel_start")a.push(["travel_end","endTravel","blue"]);else if(type==="travel_end"){if(last?.context==="return")a.push(["day_end","finishDay","gray"],["outside_end","finishOutside","yellow"]);else a.push(["work_start","startWork","green"])}else if(type==="overnight"){a.push(["work_start","startWork","green"],["travel_start","startTravel","blue"],["outside_end","finishOutside","yellow"])}else a.push(["work_start","startWork","green"],["travel_start","startTravel","blue"]);let box=$("actions");box.innerHTML="";a.forEach(([ev,key,c])=>{let b=document.createElement("button");b.className="btn action "+c;b.textContent=t[key];b.onclick=async()=>{setLoading(b,t.saving);try{await handleAction(ev)}catch(e){console.error(e);alert("Errore nel salvataggio.")}finally{clearLoading(b);renderState();renderToday();renderHistory()}};box.appendChild(b);feedbackButton(b)})}
+async function handleAction(ev){let date=todayISO(),outside=activeOutside();if(ev==="travel_start")await addEvent("travel_start",date,{periodId:outside?.id,context:"outbound"});else if(ev==="travel_end"){let last=dayEvents(date).at(-1);await addEvent("travel_end",date,{periodId:outside?.id,context:last?.context||"outbound"});if(last?.context==="return")showReturnChoice()}else if(ev==="work_start")await addEvent("work_start",date,{periodId:outside?.id});else if(ev==="break_start")await addEvent("break_start");else if(ev==="resume")await addEvent("break_end");else if(ev==="work_end"){await addEvent("work_end");showEndChoice();return}else if(ev==="overnight"){let id=outside?.id||await startOutside();await addEvent("overnight",date,{periodId:id})}else if(ev==="day_end")await addEvent("day_end");else if(ev==="outside_end")await closeOutside()}
+function showEndChoice(){let t=T[lang];openModal(t.endWork,"<p>Hai terminato il lavoro. Cosa succede adesso?</p>",[[t.endTravel,async()=>{await addEvent("travel_start",todayISO(),{periodId:activeOutside()?.id,context:"return"});closeModal();renderState()}],[t.overnight,async()=>{let id=activeOutside()?.id||await startOutside();await addEvent("overnight",todayISO(),{periodId:id});closeModal();renderState()}],[t.finishDay,async()=>{await addEvent("day_end");closeModal();renderState()}]])}
+function showReturnChoice(){let t=T[lang];openModal(t.endTravel,"<p>Rientro completato. Chiudi la giornata o termina anche il periodo fuori sede?</p>",[[t.finishOutside,async()=>{await closeOutside();await addEvent("day_end");closeModal();renderState()}],[t.finishDay,async()=>{await addEvent("day_end");closeModal();renderState()}]])}
+function renderToday(){if(!session||session.role==="admin")return;let es=dayEvents(todayISO());$("todayTitle").textContent=T[lang].today+" — "+dayName(todayISO());let box=$("todayTimeline");box.innerHTML="";if(!es.length){box.innerHTML='<div class="empty">'+T[lang].noData+"</div>";return}es.forEach(e=>{let [ico,desc]=eventLabel(e),d=document.createElement("div");d.className="event";d.innerHTML='<div class="time">'+safe(e.time)+'</div><div class="ico">'+ico+'</div><div class="desc"><strong>'+safe(desc)+'</strong></div>';box.appendChild(d)})}
+
+/* ===================== MOTORE ORE / PAGA ===================== */
+
+/* --- FIX BUG ACCUMULO ORE ---
+   minutesForDay ora usa una vera macchina a stati: ogni nuovo evento di
+   "apertura" (work_start / travel_start / break_start) chiude PRIMA
+   qualsiasi altro segmento aperto in modo incompatibile (evita che
+   lavoro e viaggio si sovrappongano e si sommino a vicenda), e un evento
+   di apertura ripetuto senza chiusura viene ignorato (non sovrascrive
+   l'orario di inizio già registrato, così non si perdono né si
+   raddoppiano minuti). day_end / outside_end / overnight chiudono
+   sempre ogni segmento eventualmente ancora aperto in quel giorno.
+   In più vengono registrati i singoli segmenti di lavoro (workSegments)
+   con orario di inizio/fine, necessari per calcolare correttamente la
+   ripartizione diurno/notturno e ordinario/straordinario. */
+function dayNightSplit(startHM, endHM) {
+  let [sh, sm] = startHM.split(":").map(Number);
+  let [eh, em] = endHM.split(":").map(Number);
+  let start = sh * 60 + sm;
+  let end = eh * 60 + em;
+  if (end <= start) end += 1440;
+
+  let day = 0, night = 0;
+  for (let m = start; m < end; m++) {
+    let mod = m % 1440;
+    if (mod >= 360 && mod < 1320) {
+      day++;
+    } else {
+      night++;
+    }
+  }
+  return { day, night };
+}
+
+function addMinutes(timeHM, mins) {
+  let [h, m] = timeHM.split(":").map(Number);
+  let total = (h * 60 + m + mins) % 1440;
+  if (total < 0) total += 1440;
+  let nh = Math.floor(total / 60);
+  let nm = total % 60;
+  return String(nh).padStart(2, "0") + ":" + String(nm).padStart(2, "0");
+}
+
+function minutesForDay(es){let work=0,workDay=0,workNight=0,travel=0,travelDay=0,travelNight=0,br=0,workSegments=[],travelSegments=[],ws=null,ts=null,bs=null,sorted=es.slice().sort(compareEvents);
+ function cw(t){if(ws){let d=minDiff(ws,t),x=dayNightSplit(ws,t);work+=d;workDay+=x.day;workNight+=x.night;workSegments.push({start:ws,end:t});ws=null}}
+ function ct(t){if(ts){let d=minDiff(ts,t),x=dayNightSplit(ts,t);travel+=d;travelDay+=x.day;travelNight+=x.night;travelSegments.push({start:ts,end:t});ts=null}}
+ function cb(t){if(bs){br+=minDiff(bs,t);bs=null}}
+ for(const e of sorted){let t=e.time;if(!t)continue;if(e.type==="work_start"){ct(t);cb(t);if(!ws)ws=t}else if(e.type==="break_start"){cw(t);ct(t);if(!bs)bs=t}else if(e.type==="break_end"){cb(t);if(!ws)ws=t}else if(e.type==="work_end"){cw(t);cb(t)}else if(e.type==="travel_start"){cw(t);cb(t);if(!ts)ts=t}else if(e.type==="travel_end")ct(t);else if(e.type==="day_end"||e.type==="outside_end"||e.type==="overnight"){cw(t);ct(t);cb(t)}}
+ let n22=0,nAfter22=0;for(const seg of workSegments){const x=minuteClass(seg.start,seg.end);n22+=x.nightTo22;nAfter22+=x.nightAfter22;}return {work,workDay,workNight,nightTo22:n22,nightAfter22:nAfter22,travel,travelDay,travelNight,br,workSegments,travelSegments};}
+
+function dayType(iso){const d=parseDate(iso).getDay();return d===0?"sunday":d===6?"saturday":"weekday"}
+
+/* Percentuali di maggiorazione. Quelle non personalizzabili dall'utente
+   sono qui: modificale liberamente se la normativa/contratto applicato
+   prevede valori diversi (indicati fra parentesi in alternativa). */
+const CCNL_CONFIG={
+  level:"D2", minimumMonthly:1979.37, divisor:173, weeklyHours:40, dailyHours:8,
+  ordinaryNightUntil22Pct:20, ordinaryNightAfter22Pct:30,
+  overtimeDayFirst2Pct:25, overtimeDayAfter2Pct:30,
+  overtimeNightPct:50, holidayPct:50, overtimeHolidayPct:55,
+  overtimeHolidayNightPct:75, travelDefaultPct:100,
+  inpsWorkerPct:9.19, annualSalaryMonths:13,
+  regionalTax:{0:0.0123,15000:0.0158,28000:0.0172,50000:0.0173},
+  municipalTax:{threshold:16000,rate:0.008},
+  accrual:{ferie:14.44,rol:8.67,exfest:2.67}
+};
+const PAY_RULES={weekdayDailyCapMin:480};
+
+function ratesOf(u){return{
+  monthlyBase:+((u&&u.pagaMensile)||CCNL_CONFIG.minimumMonthly),
+  hourly:+((u&&u.pagaMensile)||CCNL_CONFIG.minimumMonthly)/CCNL_CONFIG.divisor,
+  travelPct:(u&&u.percentualeOraViaggio!=null?+u.percentualeOraViaggio:CCNL_CONFIG.travelDefaultPct),
+  travelNightExtraPct:0,
+  allowance:+((u&&u.indennitaTrasferta)||0), allowanceFactor:+((u&&u.indennitaTrasfertaFactor)||1),
+  allowanceTaxable:!!(u&&u.indennitaTrasfertaTaxable), turni:!!(u&&u.turnista)
+}}
+
+function minuteClass(startHM,endHM){
+  let a=startHM.split(':').map(Number),b=endHM.split(':').map(Number),st=a[0]*60+a[1],en=b[0]*60+b[1];if(en<=st)en+=1440;
+  let out={day:0,nightTo22:0,nightAfter22:0};
+  for(let m=st;m<en;m++){let x=m%1440;if(x>=360&&x<1320)out.day++;else if(x>=1320)out.nightAfter22++;else if(x<360)out.nightTo22++;}
+  return out;
+}
+function dayNightSplit(startHM,endHM){let x=minuteClass(startHM,endHM);return{day:x.day,night:x.nightTo22+x.nightAfter22}}
+function addMinutes(timeHM,mins){let [h,m]=timeHM.split(':').map(Number),total=(h*60+m+mins)%1440;if(total<0)total+=1440;return String(Math.floor(total/60)).padStart(2,'0')+':'+String(total%60).padStart(2,'0')}
+
+function classifyWorkSegments(segments,capMinTotal){
+  let cum=0,ordDay=0,ordNight=0,otDay=0,otNight=0,otSegments=[];
+  for(const seg of segments){
+    const segMin=minDiff(seg.start,seg.end), remaining=Math.max(0,capMinTotal-cum), ord=Math.min(segMin,remaining), ot=segMin-ord;
+    if(ord>0){let e=addMinutes(seg.start,ord),sp=dayNightSplit(seg.start,e);ordDay+=sp.day;ordNight+=sp.night}
+    if(ot>0){let st=addMinutes(seg.start,ord),sp=dayNightSplit(st,seg.end);otDay+=sp.day;otNight+=sp.night;otSegments.push({start:st,end:seg.end})}
+    cum+=segMin;
+  }
+  return {ordDay,ordNight,otDay,otNight,otSegments};
+}
+function splitOrdinaryOvertime(iso,workSegments){return classifyWorkSegments(workSegments||[],dayType(iso)==='weekday'?480:0)}
+
+function dayPay(iso,m,rates,weeklyWorkedBefore=0){
+  const type=dayType(iso),hourly=rates.hourly,segs=m.workSegments||[];
+  const cap=type==='weekday'?Math.min(480,Math.max(0,2400-weeklyWorkedBefore)):0;
+  const cls=classifyWorkSegments(segs,cap);
+  let {ordDay:ordDayMin,ordNight:ordNightMin,otDay:otDayMin,otNight:otNightMin}=cls;
+  let payOrdinaryDay=ordDayMin/60*hourly,payOrdinaryNight=0;
+  // La retribuzione ordinaria mensile è già compresa nel minimo tabellare; queste due voci
+  // sono usate solo per mostrare la valorizzazione teorica delle ore.
+  if(rates.turni) payOrdinaryNight=ordNightMin/60*hourly*(1+0.15);
+  else payOrdinaryNight=(ordNightMin/60*hourly)+((m.nightTo22||0)/60*hourly*0.20)+((m.nightAfter22||0)/60*hourly*0.30);
+  let payOvertimeDay=0,payOvertimeNight=0,payHoliday=0,payHolidayNight=0,ot25=0,ot30=0,ot50=0,ot55=0,ot75=0;
+  if(type==='weekday'){
+    ot25=Math.min(otDayMin,120);ot30=Math.max(0,otDayMin-120);ot50=otNightMin;
+    payOvertimeDay=ot25/60*hourly*1.25+ot30/60*hourly*1.30;
+    payOvertimeNight=ot50/60*hourly*1.50;
+  }else if(type==='saturday'){
+    // Con settimana lun-ven il sabato è giornata libera: per le prime 2 ore 25%, successive 30%;
+    // oltre 2 ore nella giornata libera, il CCNL prevede 50% nei casi specifici previsti dall'art. 7.
+    ot25=Math.min(otDayMin,120);ot30=Math.max(0,otDayMin-120);ot50=otNightMin;
+    payOvertimeDay=ot25/60*hourly*1.25+ot30/60*hourly*1.30;
+    payOvertimeNight=ot50/60*hourly*1.50;
+  }else{
+    ot55=otDayMin;ot75=otNightMin;
+    payOvertimeDay=ot55/60*hourly*1.55;payOvertimeNight=ot75/60*hourly*1.75;
+  }
+  const payTravelDay=(m.travelDay||0)/60*hourly*(rates.travelPct/100),payTravelNight=(m.travelNight||0)/60*hourly*(rates.travelPct/100),payTravel=payTravelDay+payTravelNight;
+  return {type,ordDayMin,ordNightMin,otDayMin,otNightMin,payOrdinaryDay,payOrdinaryNight,payOvertimeDay,payOvertimeNight,payOrdinary:payOrdinaryDay+payOrdinaryNight,payOvertime:payOvertimeDay+payOvertimeNight,payTravel,payTravelDay,payTravelNight,ot25,ot30,ot50,ot55,ot75,payWork:payOrdinaryDay+payOrdinaryNight+payOvertimeDay+payOvertimeNight,total:payOvertimeDay+payOvertimeNight+payTravel};
+}
+function payMap(events,ym,rates){let ds=[...new Set(events.filter(e=>e.date?.startsWith(ym)).map(e=>e.date))].sort(),map=new Map(),weeks={};for(const d of ds){let z=parseDate(d),n=new Date(z);n.setDate(z.getDate()-(z.getDay()||7)+1);let k=n.getFullYear()+'-'+String(n.getMonth()+1).padStart(2,'0')+'-'+String(n.getDate()).padStart(2,'0'),m=minutesForDay(events.filter(e=>e.date===d)),before=weeks[k]||0;const p=dayPay(d,m,rates,before);map.set(d,p);if(dayType(d)==='weekday')weeks[k]=before+m.work}return map}
+
+function progressiveTax(base,brackets){let tax=0,prev=0;for(const b of brackets){let take=Math.max(0,Math.min(base,b.limit)-prev);tax+=take*b.rate;prev=b.limit;if(base<=b.limit)break}return tax+Math.max(0,base-prev)*brackets[brackets.length-1].rate}
+function regionalTaxLombardia(income){let parts=[{limit:15000,rate:.0123},{limit:28000,rate:.0158},{limit:50000,rate:.0172},{limit:Infinity,rate:.0173}];return progressiveTax(income,parts)}
+function municipalTaxSalo(income){return income<=16000?0:income*.008}
+function employeeDeduction(income){if(income<=15000)return 1955;if(income<=28000)return 1910+1190*(28000-income)/13000;if(income<=50000)return 1910;return Math.max(0,1910*(50000-income)/5000)}
+function taxEstimate(grossTaxableMonthly,months=13){
+  const annualGross=Math.max(0,grossTaxableMonthly*months),inpsAnnual=annualGross*CCNL_CONFIG.inpsWorkerPct/100,annualTaxable=Math.max(0,annualGross-inpsAnnual);
+  const irpefGross=progressiveTax(annualTaxable,[{limit:28000,rate:.23},{limit:50000,rate:.35},{limit:Infinity,rate:.43}]);
+  let deduction=employeeDeduction(annualTaxable); if(annualTaxable>50000)deduction=0;
+  let irpef=Math.max(0,irpefGross-deduction);
+  // Ulteriore detrazione lavoro dipendente 2026: 1.000 € fino a 32.000 €, poi decrescente fino a 40.000 €.
+  let extra=annualTaxable>20000&&annualTaxable<=32000?1000:(annualTaxable>32000&&annualTaxable<=40000?1000*(40000-annualTaxable)/8000:0);
+  irpef=Math.max(0,irpef-extra);
+  const regional=regionalTaxLombardia(annualTaxable),municipal=municipalTaxSalo(annualTaxable);
+  // Somma esente da cuneo fiscale 2026, se applicabile, calcolata sul reddito di lavoro dipendente.
+  let wedge=annualTaxable<=8500?annualTaxable*.071:(annualTaxable<=15000?annualTaxable*.053:(annualTaxable<=20000?annualTaxable*.048:0));
+  const monthly={inps:grossTaxableMonthly*CCNL_CONFIG.inpsWorkerPct/100,irpef:irpef/12,regional:regional/12,municipal:municipal/12,wedge:wedge/12};
+  const net=grossTaxableMonthly-monthly.inps-monthly.irpef-monthly.regional-monthly.municipal+monthly.wedge;
+  return {annualGross,inpsAnnual,annualTaxable,irpefGross,employeeDeduction:deduction,extraDeduction:extra,irpef,regional,municipal,wedge,monthly,net};
+}
+function absenceSummary(absences,ym,user){
+  absences=absences||[];const y=+ym.slice(0,4),m=+ym.slice(5,7);let used={ferie:0,rol:0,exfest:0,unpaid:0};absences.filter(a=>a.date?.startsWith(ym)).forEach(a=>used[a.type]=(used[a.type]||0)+(+a.minutes||0));
+  let ytd={ferie:0,rol:0,exfest:0};absences.filter(a=>a.date?.startsWith(y+'-')).forEach(a=>{if(a.type in ytd)ytd[a.type]+=+a.minutes||0});
+  const initial={ferie:+(user?.ferieResidueIniziali||0),rol:+(user?.rolResidueIniziali||0),exfest:+(user?.exfestResidueIniziali||0)};
+  const accr={ferie:+(user?.ferieMaturazioneMensile??CCNL_CONFIG.accrual.ferie),rol:+(user?.rolMaturazioneMensile??CCNL_CONFIG.accrual.rol),exfest:+(user?.exfestMaturazioneMensile??CCNL_CONFIG.accrual.exfest)};
+  let matured={};Object.keys(initial).forEach(k=>matured[k]=initial[k]+accr[k]*m);let residue={};Object.keys(initial).forEach(k=>residue[k]=matured[k]-ytd[k]);
+  return {used,matured,residue,accr,unpaidMinutes:used.unpaid||0};
+}
+function nightsAwayInMonth(events,ym){return new Set(events.filter(e=>e.type==='overnight'&&e.date?.startsWith(ym)).map(e=>e.date))}
+function dateRange(start,end){let out=[],d=parseDate(start),last=parseDate(end);while(d<=last){out.push(d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'));d.setDate(d.getDate()+1)}return out}
+function nightsAwayInMonth(events,ym){return new Set(events.filter(e=>e.type==="overnight"&&e.date?.startsWith(ym)).map(e=>e.date))}
+function dateRange(start,end){let out=[],d=parseDate(start),last=parseDate(end);while(d<=last){out.push(d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0"));d.setDate(d.getDate()+1)}return out}
+const BED_ICON_PNG="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAPAAAADwCAYAAAA+VemSAAAFoklEQVR4nO3dv20bZxzH4VPgQik8SCbwBOkzgQK1ArSAXSsLGFBr2BOkzwSeIIO4sDulCBgoNMmjxfff973nAdwYAnkk7qPfe7wTb1kAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACmdtXqiR5urp9KPda7T9+abTeMrGoIJaM9Rsxs2U+1HrhFvC2fB0ZUfHr1DMo0ZmuKTuDe07D380NrxQIeJZ5RtgNaeNXyyX779ZeLH+PPv/4usCUwhyLHjGtTr0S4+9ZCdjzMFly8k5+Kt0a4+06FLGJmV+00ElBftYBbTN+WzwMjuijg0T/xHX374FJVJnDrqWgKs1WOgSGYgCGYgCGYgCGYgCGYgCGYgCGYgCGYgCGYgCGYgCGYgCGYgCGYgCGYgCGYgCGYgCGYgCGYgCGYgCGYgCGYgCGYgCGYgCGYgCHYq94bcKm1G32n3ODMvYx5iciA16JN9PwXjZg5V1TAM4Z7yC5mIbMm5hh4K/E+l7L8p5/hJ/BauG8/fm20JXX98fvPB//fNOaUi3aKYxOi1A23j8U7S7THHItZxOyLWULvzB7vsmzjNVLGsAEfmr5b2rEPvVbHxOwbMuCtx7sjYtYMGfC+Lca7s+XXzrrhAt6fvnbg798DU5id4QIGzidgCDZUwJbPx1lGc8hQAQM/RsAQTMAQTMAQTMAQTMAQTMAQTMAQTMAQTMAQTMAQbPgvteM410P3NcJ3lAkYXmiEL+O3hIYCHm6un3qsiIYKeP/raI99veoWeS8ytI54qIBhBi0jFjBU0CriIe/M4Js5/m9/+Xx/d9tpS9h5//jhrJ+r/eFWxATe8vHfll/7yO7vbv/7d0rtSTxkwIcm+BZ35EOv2fQdT8+Ihwx4WUQs3iy9Ih424GO2EPEWXuOMevyCHfJDrOe2fn/gHdM3x6kPuEp/qDV8wDtrIc9KuJmORVw64JgldI1fCqMTL2ui/phhF/Hs01i483q4uX4qOYWjAt55Po1niVm0c7m/uz37Yo9LRAb83NpUFgYzizkGBr4nYAhWJeDWx6WzHAfDj7roGPjdp29XI38v02zHv6/fPPbeBM705fNdk+eptoRuNRW3MH1fv3kUb5jXbx6bXCXoGHhwws1WO+IiJ5TXltE9Lq2cYfks3nk8v9a95IUcxR7onGPhEiGfs2QWLyPaRRx7JdYWjldLEO+c3n78WvxPRYsdA4/wLfXLMsf0hXMVj67naaUZ4jV953d1dZW5hK5lhnDhJeJPI4mXLYucwKKFfzULWHRQXvwSGrZMwBBMwINp9Vcs9DHshRxAewIekCk8pxp33BDwoEQ8l1q3yxHwwEQ8h5r3uhLw4EScrfaN6gQc4MvnOyGH+fL5rsldJiMvpdwqEbPPBIZgAoZgAoZgAoZgAoZgAoZgAoZgAoZgAoZgAoZgAoZgAoZgAoZgAoZgAoZgAoZgAoZgAoZgAoZgzQJ+//ih1VNBd6329+IBv/v07ar0Y8IsSvdhCQ3BmgZsGc0WtNzPqwR8apkgYmZ2av+ucXjZZQktYmbUY7+uFvDabxsRM5O1/bnWh7tVJ7CI2YJe8S7LsjQ55fNwc/10zs/d393W3hQo4tzhU/u0arNztudGDLNocU1Esw+xXODBlrTa35t+Ci1itqDlft78NJKImVnr/bvLeWARM6Me+7VroSHYq94bUJLJzrlmOStiAkMwAUMwAUMwAUMwAUMwAUMwAUMwAUMwAUMwAUMwAUMwAUMwAUMwAUMwAUMwAUMwAUMwAUMwAUMwAUMwAUMwAUMwAUMwAUOwbgGXvouCuzLwI2bZ/7pO4FIvWry8xAz7X/cl9KUvXrxcIn3/6x7wsrz8Tej95jEH+x8AAAAAAAAAAAAAAAAwv38ALH2p0qCAr+wAAAAASUVORK5CYII=";
+function outsideDatesInMonth(periods,ym){let set=new Set(),first=ym+"-01",last=ym+"-31";periods.forEach(p=>{let end=p.endDate||todayISO(),a=p.startDate<first?first:p.startDate,b=end>last?last:end;if(a<=b)dateRange(a,b).forEach(d=>set.add(d))});return set}
+
+/* Aggrega mese per mese ore e paga; ora include anche il dettaglio
+   diurno/notturno di ordinario e straordinario. */
+function computeSummary(events,periods,ym,rates,absences=[]){
+  rates=rates||ratesOf(null);let pm=payMap(events,ym,rates),days=new Set(events.filter(e=>e.date?.startsWith(ym)).map(e=>e.date));outsideDatesInMonth(periods||[],ym).forEach(d=>days.add(d));
+  let work=0,workDay=0,workNight=0,travel=0,travelDay=0,travelNight=0,br=0,workDays=0,payOvertimeDay=0,payOvertimeNight=0,payTravel=0,payTravelDay=0,payTravelNight=0;
+  for(const d of days){let m=minutesForDay(events.filter(e=>e.date===d)),p=pm.get(d)||dayPay(d,m,rates);work+=m.work;workDay+=m.workDay;workNight+=m.workNight;travel+=m.travel;travelDay+=m.travelDay;travelNight+=m.travelNight;br+=m.br;if(m.work>0)workDays++;payOvertimeDay+=p.payOvertimeDay;payOvertimeNight+=p.payOvertimeNight;payTravel+=p.payTravel;payTravelDay+=p.payTravelDay;payTravelNight+=p.payTravelNight}
+  const nights=nightsAwayInMonth(events,ym).size,allowanceGross=nights*rates.allowance*rates.allowanceFactor,unpaid=absenceSummary(absences,ym,null).unpaidMinutes||0;
+  const unpaidReduction=unpaid/60*rates.hourly;
+  const basePay=Math.max(0,rates.monthlyBase-unpaidReduction),payOvertime=payOvertimeDay+payOvertimeNight,payTaxable=basePay+payOvertime+payTravel+(rates.allowanceTaxable?allowanceGross:0),grossTotal=payTaxable+(rates.allowanceTaxable?0:allowanceGross),tax=taxEstimate(payTaxable,CCNL_CONFIG.annualSalaryMonths);
+  return {work,workDay,workNight,travel,travelDay,travelNight,br,outside:nights,workDays,overtimeMinutes:pm.size?[...pm.values()].filter(Boolean).reduce((q,p)=>q+(p.otDayMin||0)+(p.otNightMin||0),0):0,payBase:basePay,payOvertimeDay,payOvertimeNight,payOvertime,payTravel,payTravelDay,payTravelNight,payAllowance:allowanceGross,allowanceTaxable:rates.allowanceTaxable,payTaxable,grossTotal,unpaidMinutes:unpaid,unpaidReduction,tax,nights};
+}
+function payrollHtml(events,periods,ym,rates,absences,user){let s=computeSummary(events,periods,ym,rates,absences),a=absenceSummary(absences,ym,user),t=T[lang];return '<div class="payroll-head">'
+  +'<div class="payroll-box"><div class="lbl">CCNL / livello</div><div class="val">Metalmeccanici Industria D2</div></div>'
+  +'<div class="payroll-box"><div class="lbl">Minimo tabellare lordo</div><div class="val">'+fmtEUR(rates.monthlyBase)+'</div></div>'
+  +'<div class="payroll-box"><div class="lbl">Quota oraria lorda</div><div class="val">'+fmtEUR(rates.hourly)+'</div></div>'
+  +'<div class="payroll-box"><div class="lbl">Ore ordinarie lavorate</div><div class="val">'+fmtMin(s.work)+'</div></div>'
+  +'<div class="payroll-box"><div class="lbl">Ore straordinarie</div><div class="val">'+fmtMin(s.payOvertimeDay?s.overtimeMinutes:0)+'</div></div>'
+  +'<div class="payroll-box payroll-net"><div class="lbl">NETTO STIMATO</div><div class="val">'+fmtEUR(s.tax.net+(s.allowanceTaxable?0:s.payAllowance))+'</div></div></div>'
+  +'<div class="payroll-section"><h4>Competenze lorde</h4>'
+  +'<div class="payroll-row"><span>Paga base mensile</span><strong>'+fmtEUR(s.payBase)+'</strong></div>'
+  +'<div class="payroll-row"><span>Straordinario diurno</span><strong>'+fmtEUR(s.payOvertimeDay)+'</strong></div>'
+  +'<div class="payroll-row"><span>Straordinario notturno / festivo</span><strong>'+fmtEUR(s.payOvertimeNight)+'</strong></div>'
+  +'<div class="payroll-row"><span>Ore viaggio</span><strong>'+fmtEUR(s.payTravel)+'</strong></div>'
+  +'<div class="payroll-row"><span>Diaria / trasferta</span><strong>'+fmtEUR(s.payAllowance)+(s.allowanceTaxable?' (imponibile)':' (esente stimata)')+'</strong></div>'
+  +'<div class="payroll-row"><span><strong>Totale competenze</strong></span><strong>'+fmtEUR(s.grossTotal)+'</strong></div></div>'
+  +'<div class="payroll-section"><h4>Trattenute fiscali e previdenziali stimate</h4>'
+  +'<div class="payroll-row"><span>INPS lavoratore ('+CCNL_CONFIG.inpsWorkerPct.toFixed(2)+'%)</span><strong>- '+fmtEUR(s.tax.monthly.inps)+'</strong></div>'
+  +'<div class="payroll-row"><span>IRPEF netta stimata dopo detrazioni</span><strong>- '+fmtEUR(s.tax.monthly.irpef)+'</strong></div>'
+  +'<div class="payroll-row"><span>Addizionale regionale Lombardia</span><strong>- '+fmtEUR(s.tax.monthly.regional)+'</strong></div>'
+  +'<div class="payroll-row"><span>Addizionale comunale Salò</span><strong>- '+fmtEUR(s.tax.monthly.municipal)+'</strong></div>'
+  +(s.tax.monthly.wedge?'<div class="payroll-row"><span>Somma esente cuneo fiscale 2026</span><strong>+ '+fmtEUR(s.tax.monthly.wedge)+'</strong></div>':'')
+  +'</div><div class="payroll-section"><h4>Ferie e permessi</h4>'
+  +['ferie','rol','exfest'].map(k=>'<div class="payroll-row"><span>'+({ferie:'Ferie',rol:'ROL / PAR',exfest:'Ex festività'}[k])+'</span><strong>Maturate: '+fmtMin(a.matured[k])+' · Godute: '+fmtMin(a.used[k])+' · Residue: '+fmtMin(a.residue[k])+'</strong></div>').join('')
+  +'<div class="payroll-row"><span>Assenze non retribuite</span><strong>'+fmtMin(a.unpaidMinutes)+'</strong></div>'
+  +'</div><div class="payroll-note">Stima simulativa: il cedolino reale dipende da elementi individuali, previdenza, conguagli, detrazioni dichiarate, eventuale superminimo, turni, welfare e regole aziendali. Il netto non viene mai usato per calcolare le ore.</div>';
+}
+function absenceManagerHtml(absences,ym,user){let t=T[lang],rows=(absences||[]).filter(a=>a.date?.startsWith(ym)).sort((a,b)=>a.date.localeCompare(b.date));return '<div class="hint">Le ore di ferie/ROL/ex-festività sono retribuite e non riducono la paga base. Le assenze non retribuite riducono il lordo con la quota oraria di '+fmtEUR(ratesOf(user).hourly)+'.</div><div id="absenceRows" style="margin-top:10px">'+rows.map(a=>'<div class="payroll-row"><span>'+safe(a.date)+' — '+({ferie:'Ferie',rol:'ROL/PAR',exfest:'Ex festività',unpaid:'Non retribuita'}[a.type]||a.type)+'</span><strong>'+fmtMin(a.minutes)+'</strong></div>').join('')+'</div><hr><div class="field-row"><div class="field"><label>Data</label><input id="absDate" type="date" value="'+ym+'-01"></div><div class="field"><label>Tipo</label><select id="absType"><option value="ferie">Ferie</option><option value="rol">ROL / PAR</option><option value="exfest">Ex festività</option><option value="unpaid">Non retribuita</option></select></div></div><div class="field"><label>Ore di assenza</label><input id="absHours" type="number" min="0" step="0.25" value="8"></div>'}
+function openAbsenceManager(){let t=T[lang];openModal('Assenze e contatori',absenceManagerHtml(myAbsences,monthYM,session),[['Aggiungi',async()=>{let date=$('absDate').value,type=$('absType').value,h=+($('absHours').value||0);if(!date||h<=0)throw Error('Inserisci data e ore.');await addDoc(entriesCol,{kind:'absence',uid:session.uid,usernameLower:session.usernameLower,username:session.username,date,type,minutes:Math.round(h*60),createdAt:serverTimestamp()});closeModal()}],[t.cancel,closeModal]]);}
+function absenceCountersHtml(absences,ym,user){let a=absenceSummary(absences,ym,user);return '<div class="payroll-row"><span>Ferie</span><strong>Maturate '+fmtMin(a.matured.ferie)+' · Godute '+fmtMin(a.used.ferie)+' · Residue '+fmtMin(a.residue.ferie)+'</strong></div><div class="payroll-row"><span>ROL / PAR</span><strong>Maturate '+fmtMin(a.matured.rol)+' · Godute '+fmtMin(a.used.rol)+' · Residue '+fmtMin(a.residue.rol)+'</strong></div><div class="payroll-row"><span>Ex festività</span><strong>Maturate '+fmtMin(a.matured.exfest)+' · Godute '+fmtMin(a.used.exfest)+' · Residue '+fmtMin(a.residue.exfest)+'</strong></div>'}
+function dateRangeSafe(){}
+function hoursSummaryHtml(events,periods,ym){let s=computeSummary(events,periods,ym),t=T[lang];return '<div class="summary-grid"><div class="summary total-work"><div class="lbl">'+t.totalWorkHours+'</div><div class="val">'+fmtMin(s.work)+'</div></div><div class="summary total-travel"><div class="lbl">'+t.totalTravelHours+'</div><div class="val">'+fmtMin(s.travel)+'</div></div><div class="summary"><div class="lbl">'+t.totalWorkDay+'</div><div class="val">'+fmtMin(s.workDay)+'</div></div><div class="summary"><div class="lbl">'+t.totalWorkNight+'</div><div class="val">'+fmtMin(s.workNight)+'</div></div><div class="summary"><div class="lbl">'+t.workDays+'</div><div class="val">'+s.workDays+'</div></div><div class="summary"><div class="lbl">'+t.breakHours+'</div><div class="val">'+fmtMin(s.br)+'</div></div><div class="summary"><div class="lbl">'+t.outsideDays+'</div><div class="val">'+s.outside+'</div></div></div>'}
+function summaryModal(events,periods,ym,rates,absences,user){openModal(T[lang].summary,summaryHtml(events,periods,ym,rates,absences,user),[["OK",closeModal]])}
+$("languageSelect").onchange=e=>setLang(e.target.value);
+$("loginBtn").onclick=async()=>{let b=$("loginBtn");setLoading(b,"…");$("loginError").classList.remove("show");try{await loginOrRegister($("loginUser").value,$("loginPass").value,$("languageSelect").value);if(session.role==="admin")enterAdmin();else enterApp()}catch(e){$("loginError").textContent=e.message||"Accesso non riuscito.";$("loginError").classList.add("show")}finally{clearLoading(b)}};
+$("logoutBtn").onclick=async()=>{if(unsub)unsub();clearSession();await signOut(auth);location.reload()};$("adminLogout").onclick=async()=>{if(unsubAdmin)unsubAdmin();clearSession();await signOut(auth);location.reload()};$("modal").onclick=e=>{if(e.target.id==="modal")closeModal()};
+$("prevMonth").onclick=()=>{monthYM=shiftYM(monthYM,-1);renderHistory()};$("nextMonth").onclick=()=>{monthYM=shiftYM(monthYM,1);renderHistory()};$("currentMonth").onclick=()=>{monthYM=currentYM();renderHistory()};
+$("summaryBtn").onclick=()=>downloadPDFHours("Riepilogo_Ore_"+session.username+"_"+monthYM,myEvents,outsidePeriods,monthYM);$("pdfStimaBtn").onclick=()=>downloadPDFStima("Cedolino_"+session.username+"_"+monthYM,myEvents,outsidePeriods,monthYM,ratesOf(session),myAbsences,session);
+$("adminBack").onclick=()=>{$("adminReport").classList.add("hidden");adminUser=null;if(unsubAdmin){unsubAdmin();unsubAdmin=null}};$("adminPrev").onclick=()=>{adminMonthYM=shiftYM(adminMonthYM,-1);renderAdminHistory()};$("adminNext").onclick=()=>{adminMonthYM=shiftYM(adminMonthYM,1);renderAdminHistory()};$("adminCurrent").onclick=()=>{adminMonthYM=currentYM();renderAdminHistory()};$("adminSummary").onclick=()=>summaryModal(adminEvents,adminPeriods,adminMonthYM,ratesOf(adminUser),adminAbsences,adminUser);$("adminPdf").onclick=()=>downloadPDFHours("Foglio_Ore_"+(adminUser?.username||"utente")+"_"+adminMonthYM,adminEvents,adminPeriods,adminMonthYM);
+$("adminReport").querySelector(".month-toggle").insertAdjacentHTML("afterend",'<div class="btn-row" style="margin:10px 0"><button class="btn btn-danger" id="adminDeleteMonthBtn">🗑️ '+T[lang].deleteMonth+'</button></div>');$("adminDeleteMonthBtn").onclick=deleteMonth;
+$("settingsBtn").onclick=()=>{let t=T[lang],u=session;openModal(t.settings,
+  "<div class='field-row'><div class='field'><label>Lingua</label><select id='modalLang'><option value='it'>Italiano</option><option value='en'>English</option><option value='fr'>Français</option><option value='ar'>العربية</option></select></div><div class='field'><label>Minimo tabellare lordo mensile</label><input id='modalBase' type='number' step='0.01' min='0'></div></div>"+
+  "<div class='field-row'><div class='field'><label>% paga ore viaggio</label><input id='modalTravelPct' type='number' step='1' min='0'></div><div class='field'><label>Diaria trasferta intera (€)</label><input id='modalAllowance' type='number' step='0.01' min='0'></div></div>"+
+  "<div class='field-row'><div class='field'><label>Fattore diaria (1 = intera; 0,667 = 2/3)</label><input id='modalAllowanceFactor' type='number' step='0.001' min='0' max='1'></div><div class='field'><label>Diaria imponibile?</label><select id='modalAllowanceTaxable'><option value='0'>No, esente stimata</option><option value='1'>Sì</option></select></div></div>"+
+  "<h4>Contatori iniziali (ore)</h4><div class='field-row'><div class='field'><label>Ferie residue iniziali</label><input id='mFerie' type='number' step='0.01' min='0'></div><div class='field'><label>ROL/PAR residue iniziali</label><input id='mRol' type='number' step='0.01' min='0'></div></div><div class='field-row'><div class='field'><label>Ex festività residue iniziali</label><input id='mEx' type='number' step='0.01' min='0'></div><div class='field'><label>Maturazione ferie mensile</label><input id='aFerie' type='number' step='0.01' min='0'></div></div><div class='field-row'><div class='field'><label>Maturazione ROL/PAR mensile</label><input id='aRol' type='number' step='0.01' min='0'></div><div class='field'><label>Maturazione ex festività mensile</label><input id='aEx' type='number' step='0.01' min='0'></div></div>",
+  [[t.save,async()=>{let l=$("modalLang").value,base=parseFloat($("modalBase").value)||CCNL_CONFIG.minimumMonthly,travel=parseFloat($("modalTravelPct").value)||100,allow=parseFloat($("modalAllowance").value)||0,factor=parseFloat($("modalAllowanceFactor").value);if(!isFinite(factor))factor=1;let data={language:l,pagaMensile:base,percentualeOraViaggio:travel,indennitaTrasferta:allow,indennitaTrasfertaFactor:factor,indennitaTrasfertaTaxable:$("modalAllowanceTaxable").value==='1',ferieResidueIniziali:+$("mFerie").value||0,rolResidueIniziali:+$("mRol").value||0,exfestResidueIniziali:+$("mEx").value||0,ferieMaturazioneMensile:+$("aFerie").value||CCNL_CONFIG.accrual.ferie,rolMaturazioneMensile:+$("aRol").value||CCNL_CONFIG.accrual.rol,exfestMaturazioneMensile:+$("aEx").value||CCNL_CONFIG.accrual.exfest};await updateDoc(doc(usersCol,session.uid),data);Object.assign(session,data);saveSession();setLang(l);closeModal()}],[t.cancel,closeModal]]);
+  $("modalLang").value=u.language||'it';$("modalBase").value=u.pagaMensile||CCNL_CONFIG.minimumMonthly;$("modalTravelPct").value=u.percentualeOraViaggio??100;$("modalAllowance").value=u.indennitaTrasferta||0;$("modalAllowanceFactor").value=u.indennitaTrasfertaFactor??1;$("modalAllowanceTaxable").value=u.indennitaTrasfertaTaxable?'1':'0';$("mFerie").value=u.ferieResidueIniziali||0;$("mRol").value=u.rolResidueIniziali||0;$("mEx").value=u.exfestResidueIniziali||0;$("aFerie").value=u.ferieMaturazioneMensile??CCNL_CONFIG.accrual.ferie;$("aRol").value=u.rolMaturazioneMensile??CCNL_CONFIG.accrual.rol;$("aEx").value=u.exfestMaturazioneMensile??CCNL_CONFIG.accrual.exfest};
+
+async function callAdmin(name,data){let fn=httpsCallable(functions,name);return (await fn(data)).data}
+async function deleteMonth(){if(!adminUser)return;let ym=adminMonthYM;if(!confirm("Eliminare definitivamente tutti i dati di "+ymLabel(ym)+" di "+adminUser.username+"?"))return;try{let q=query(entriesCol,where("uid","==",adminUser.uid)),snap=await getDocs(q),batch=writeBatch(db),count=0;snap.forEach(docSnap=>{let data=docSnap.data(),d=data.date||data.startDate;if(d&&d.startsWith(ym)){batch.delete(docSnap.ref);count++}});if(count>0)await batch.commit();alert("Mese eliminato.")}catch(e){console.error(e);alert("Errore durante l'eliminazione del mese: "+(e.message||"operazione non riuscita."))}}
+function adminPassword(u){openModal(T[lang].changePassword,'<div class="field"><label>Nuova password</label><input id="newAdminPassword" type="password" minlength="6"></div>',[["Salva",async()=>{let p=$("newAdminPassword").value;if(p.length<6)throw Error("La password deve avere almeno 6 caratteri.");await callAdmin("adminUpdateUserPassword",{uid:u.uid,password:p});closeModal();alert("Password modificata.")}],["Annulla",closeModal]])}
+async function deleteUser(u){if(!confirm("Eliminare definitivamente l'utente "+u.username+" e tutti i suoi dati?"))return;try{let q=query(entriesCol,where("uid","==",u.uid)),snap=await getDocs(q),batch=writeBatch(db);snap.forEach(docSnap=>batch.delete(docSnap.ref));if(!snap.empty)await batch.commit();await deleteDoc(doc(usersCol,u.uid));alert("Utente eliminato.");if(adminUser?.uid===u.uid){$("adminReport").classList.add("hidden");adminUser=null}}catch(e){console.error(e);alert("Errore durante l'eliminazione dell'utente: "+(e.message||"operazione non riuscita."))}}
+
+function summaryHtml(events,periods,ym,rates,absences,user){return payrollHtml(events,periods,ym,rates||ratesOf(user),absences||[],user||session)}
+
+function renderHistory(){
+  if(!session||session.role==="admin")return;
+  $("monthMain").textContent=ymLabel(monthYM);
+  let days=new Set(myEvents.filter(e=>e.date?.startsWith(monthYM)).map(e=>e.date));
+  outsideDatesInMonth(outsidePeriods,monthYM).forEach(d=>days.add(d));
+  let arr=[...days].sort().reverse(),t=T[lang],rates=ratesOf(session);
+  if(!arr.length){$("historyTable").innerHTML='<div class="empty">'+t.noData+"</div>";return}
+  let s=computeSummary(myEvents,outsidePeriods,monthYM,rates,myAbsences);
+  let nights=nightsAwayInMonth(myEvents,monthYM),payByDay=payMap(myEvents,monthYM,rates);
+  let h='<table><thead><tr><th>Data</th><th>Giorno</th>'
+    +'<th class="valcol"><span class="th-ico">🚚</span><span class="th-lbl">'+t.colTravel+'</span></th>'
+    +'<th class="valcol"><span class="th-ico">🟢</span><span class="th-lbl">'+t.colWork+'</span></th>'
+    +'<th class="valcol"><span class="th-ico">🌞</span><span class="th-lbl">'+t.colDay+'</span></th>'
+    +'<th class="valcol"><span class="th-ico">🌙</span><span class="th-lbl">'+t.colNight+'</span></th>'
+    +'<th class="valcol"><span class="th-ico">☕</span><span class="th-lbl">'+t.colBreak+'</span></th>'
+    +'<th class="valcol"><span class="th-ico">🏨</span><span class="th-lbl">'+t.colOutside+'</span></th>'
+    +'<th class="valcol"><span class="th-ico">💶</span><span class="th-lbl">'+t.colPay+'</span></th><th></th></tr></thead><tbody>';
+  for(let d of arr){
+    let m=minutesForDay(dayEvents(d)),out=nights.has(d);
+    let p=payByDay.get(d)||dayPay(d,m,rates),dayTotal=p.total+(nights.has(d)?rates.allowance:0);
+    h+='<tr><td>'+d.split("-").reverse().join("/")+'</td><td>'+dayName(d).slice(0,3)+'</td>'
+      +'<td class="valcol">'+fmtMin(m.travel)+'</td>'
+      +'<td class="valcol">'+fmtMin(m.work)+'</td>'
+      +'<td class="valcol">'+fmtMin(m.workDay)+'</td>'
+      +'<td class="valcol">'+fmtMin(m.workNight)+'</td>'
+      +'<td class="valcol">'+fmtMin(m.br)+'</td>'
+      +'<td class="valcol">'+(out?"✓":"—")+'</td>'
+      +'<td class="valcol">'+fmtEUR(dayTotal)+'</td>'
+      +'<td class="valcol"><button type="button" class="btn-link edit-day-btn" data-date="'+d+'">✏️</button></td></tr>';
+  }
+  h+='</tbody><tfoot><tr><td>'+t.colTotal+'</td><td></td>'
+    +'<td class="valcol tot-travel">'+fmtMin(s.travel)+'</td>'
+    +'<td class="valcol tot-work">'+fmtMin(s.work)+'</td>'
+    +'<td class="valcol">'+fmtMin(s.workDay)+'</td>'
+    +'<td class="valcol">'+fmtMin(s.workNight)+'</td>'
+    +'<td class="valcol">'+fmtMin(s.br)+'</td>'
+    +'<td class="valcol">'+s.outside+'</td>'
+    +'<td class="valcol tot-work">'+fmtEUR(s.grossTotal)+'</td><td></td></tr></tfoot>';
+  $("historyTable").innerHTML=h+"</table>";
+  $("historyTable").querySelectorAll(".edit-day-btn").forEach(b=>{b.addEventListener("click",()=>editDay(b.dataset.date));feedbackButton(b)});
+}
+
+function buildPdfTable(events,periods,ym){let days=new Set(events.filter(e=>e.date?.startsWith(ym)).map(e=>e.date));outsideDatesInMonth(periods,ym).forEach(d=>days.add(d));return [...days].sort()}
+async function loadScript(src){await new Promise((res,rej)=>{let s=document.createElement("script");s.src=src;s.onload=res;s.onerror=rej;document.head.appendChild(s)})}
+
+async function downloadPDFHours(title,events,periods,ym){
+  if(!window.jspdf)await loadScript("https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js");
+  if(!window.jspdf.jsPDF.API.autoTable)await loadScript("https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js");
+  let jsPDF=window.jspdf.jsPDF,doc=new jsPDF({unit:"mm",format:"a4"}),s=computeSummary(events,periods,ym),t=T[lang];
+  doc.setFontSize(17);doc.setTextColor(23,49,42);doc.text(title,14,16);
+  doc.setFontSize(9);doc.setTextColor(101,117,111);doc.text(ymLabel(ym),14,23);
+  doc.setDrawColor(223,231,227);doc.line(14,27,196,27);
+  let sy=34;doc.setFontSize(12);doc.setTextColor(22,115,74);doc.text(t.totalWorkHours+": "+fmtMin(s.work),14,sy);
+  doc.setTextColor(40,104,178);doc.text(t.totalTravelHours+": "+fmtMin(s.travel),105,sy);
+  sy+=8;doc.setFontSize(9);doc.setTextColor(101,117,111);
+  doc.text(t.workDays+": "+s.workDays,14,sy);doc.text(t.outsideDays+": "+s.outside,80,sy);doc.text(t.breakHours+": "+fmtMin(s.br),146,sy);
+  let nightsPdf=nightsAwayInMonth(events,ym),days=buildPdfTable(events,periods,ym);
+  let body=days.map(d=>{let m=minutesForDay(events.filter(e=>e.date===d)),out=nightsPdf.has(d);return[d.split("-").reverse().join("/"),dayName(d).slice(0,3),fmtMin(m.travel),fmtMin(m.work),fmtMin(m.workDay),fmtMin(m.workNight),fmtMin(m.br),out?"✓":"—"]});
+  doc.autoTable({startY:sy+8,head:[["Data","Giorno","Viaggio","Lavoro",t.colDay,t.colNight,"Pause","Fuori sede"]],body,
+    didDrawCell:function(data){if(data.section==="body"&&data.column.index===7&&nightsPdf.has(days[data.row.index])){let sz=4.6,x=data.cell.x+(data.cell.width-sz)/2,y=data.cell.y+(data.cell.height-sz)/2;try{doc.addImage(BED_ICON_PNG,"PNG",x,y,sz,sz)}catch(e){}}},
+    styles:{fontSize:9,cellPadding:3,lineColor:[223,231,227],lineWidth:.2,textColor:[23,49,42]},
+    headStyles:{fillColor:[232,246,239],textColor:[23,49,42],fontStyle:"bold",lineColor:[223,231,227],lineWidth:.2},
+    alternateRowStyles:{fillColor:[249,251,250]},
+    columnStyles:{2:{halign:"right"},3:{halign:"right"},4:{halign:"right"},5:{halign:"right"},6:{halign:"right"},7:{halign:"center"}},
+    foot:[["","",{content:t.totalTravelHours+": "+fmtMin(s.travel),styles:{textColor:[40,104,178],fontStyle:"bold",fontSize:9,halign:"right"}},{content:t.totalWorkHours+": "+fmtMin(s.work),styles:{textColor:[22,115,74],fontStyle:"bold",fontSize:9,halign:"right"}},{content:t.colDay+": "+fmtMin(s.workDay),styles:{textColor:[101,117,111],fontSize:8,halign:"right"}},{content:t.colNight+": "+fmtMin(s.workNight),styles:{textColor:[101,117,111],fontSize:8,halign:"right"}},{content:t.breakHours+": "+fmtMin(s.br),styles:{textColor:[101,117,111],fontSize:8}},{content:t.outsideDays+": "+s.outside,styles:{textColor:[101,117,111],fontSize:8}}]],
+    footStyles:{fillColor:[249,251,250],lineWidth:.3,lineColor:[223,231,227]}});
+  doc.save(title.replace(/[^a-z0-9_-]/gi,"_")+".pdf");
+}
+
+async function downloadPDFStima(title,events,periods,ym,rates,absences,user){
+  rates=rates||ratesOf(user||null);absences=absences||[];
+  if(!window.jspdf)await loadScript("https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js");
+  if(!window.jspdf.jsPDF.API.autoTable)await loadScript("https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js");
+  const jsPDF=window.jspdf.jsPDF,doc=new jsPDF({unit:'mm',format:'a4'}),s=computeSummary(events,periods,ym,rates,absences),a=absenceSummary(absences,ym,user),net=s.tax.net+(s.allowanceTaxable?0:s.payAllowance);
+  doc.setFontSize(17);doc.setTextColor(23,49,42);doc.text('Simulazione Cedolino - CCNL Metalmeccanici Industria D2',14,16);
+  doc.setFontSize(9);doc.setTextColor(101,117,111);doc.text(ymLabel(ym)+' - '+(user?.username||''),14,23);doc.line(14,27,196,27);
+  doc.setFontSize(11);doc.setTextColor(23,49,42);doc.text('Minimo tabellare lordo: '+fmtEUR(rates.monthlyBase)+'   Quota oraria: '+fmtEUR(rates.hourly),14,35);
+  doc.autoTable({startY:41,head:[['Voce','Quantità / criterio','Importo']],body:[
+    ['Paga base','mensile lordo',fmtEUR(s.payBase)],
+    ['Straordinario diurno',fmtMin(s.overtimeMinutes)+' h',fmtEUR(s.payOvertimeDay)],
+    ['Straordinario notturno/festivo','maggiorazioni CCNL',fmtEUR(s.payOvertimeNight)],
+    ['Ore di viaggio',fmtMin(s.travel),fmtEUR(s.payTravel)],
+    ['Diaria trasferta',s.nights+' notti',fmtEUR(s.payAllowance)+(s.allowanceTaxable?' imponibile':' esente stimata')],
+    ['TOTALE COMPETENZE LORDE','',fmtEUR(s.grossTotal)]
+  ]});
+  let y=doc.lastAutoTable.finalY+8;doc.setFontSize(12);doc.text('Trattenute / stima fiscale',14,y);y+=5;
+  doc.autoTable({startY:y,head:[['Voce','Importo']],body:[
+    ['INPS lavoratore ('+CCNL_CONFIG.inpsWorkerPct.toFixed(2)+'%)','- '+fmtEUR(s.tax.monthly.inps)],
+    ['IRPEF netta dopo detrazioni','- '+fmtEUR(s.tax.monthly.irpef)],
+    ['Addizionale regionale Lombardia','- '+fmtEUR(s.tax.monthly.regional)],
+    ['Addizionale comunale Salò','- '+fmtEUR(s.tax.monthly.municipal)],
+    ['Cuneo fiscale 2026','+ '+fmtEUR(s.tax.monthly.wedge)],
+    ['NETTO STIMATO','',fmtEUR(net)]
+  ]});
+  y=doc.lastAutoTable.finalY+8;doc.setFontSize(12);doc.text('Ferie e permessi',14,y);y+=3;
+  doc.autoTable({startY:y,head:[['Contatore','Maturate','Godute','Residue']],body:[['Ferie',fmtMin(a.matured.ferie),fmtMin(a.used.ferie),fmtMin(a.residue.ferie)],['ROL / PAR',fmtMin(a.matured.rol),fmtMin(a.used.rol),fmtMin(a.residue.rol)],['Ex festività',fmtMin(a.matured.exfest),fmtMin(a.used.exfest),fmtMin(a.residue.exfest)]]});
+  doc.setFontSize(8);doc.setTextColor(101,117,111);doc.text('Simulazione indicativa: non sostituisce il cedolino elaborato dal datore di lavoro/consulente.',14,290);
+  doc.save(title.replace(/[^a-z0-9_-]/gi,'_')+'.pdf');
+}
+
+function openModal(title,body,buttons){$("modalTitle").textContent=title;$("modalBody").innerHTML=body;let b=$("modalButtons");b.innerHTML="";buttons.forEach(([label,fn],i)=>{let x=document.createElement("button");x.className="btn "+(i===0?"btn-primary":"btn-secondary");x.textContent=label;x.onclick=async()=>{try{await fn()}catch(e){console.error(e);alert(e.message||"Operazione non riuscita.")}};b.appendChild(x);feedbackButton(x)});$("modal").classList.add("show")}
+function closeModal(){$("modal").classList.remove("show")}
+
+async function loginOrRegister(username,password,l){username=(username||"").trim();if(!username||!password)throw Error("Inserisci nome utente e password.");let usernameLower=username.toLowerCase();let email=syntheticEmail(username),cred;try{cred=await signInWithEmailAndPassword(auth,email,password)}catch(e){if(e.code==="auth/user-not-found"||e.code==="auth/invalid-credential"){if(usernameLower==="admin")throw Error("Il nome utente 'admin' è riservato.");try{cred=await createUserWithEmailAndPassword(auth,email,password);let uid=cred.user.uid;await setDoc(doc(usersCol,uid),{uid,username,usernameLower,role:"user",language:l||"it",email,pagaMensile:CCNL_CONFIG.minimumMonthly,percentualeOraViaggio:100,indennitaTrasferta:0,indennitaTrasfertaFactor:1,indennitaTrasfertaTaxable:false,ferieResidueIniziali:0,rolResidueIniziali:0,exfestResidueIniziali:0,ferieMaturazioneMensile:CCNL_CONFIG.accrual.ferie,rolMaturazioneMensile:CCNL_CONFIG.accrual.rol,exfestMaturazioneMensile:CCNL_CONFIG.accrual.exfest,createdAt:serverTimestamp()})}catch(createErr){throw Error(createErr.message)} }else throw e}let uid=cred.user.uid,ref=doc(usersCol,uid),snap=await getDoc(ref);if(!snap.exists())await setDoc(ref,{uid,username,usernameLower,role:"user",language:l||"it",email,pagaMensile:CCNL_CONFIG.minimumMonthly,percentualeOraViaggio:100,indennitaTrasferta:0,indennitaTrasfertaFactor:1,indennitaTrasfertaTaxable:false,ferieResidueIniziali:0,rolResidueIniziali:0,exfestResidueIniziali:0,ferieMaturazioneMensile:CCNL_CONFIG.accrual.ferie,rolMaturazioneMensile:CCNL_CONFIG.accrual.rol,exfestMaturazioneMensile:CCNL_CONFIG.accrual.exfest,createdAt:serverTimestamp()},{merge:true});let d=(await getDoc(ref)).data();session={uid,username:d.username||username,usernameLower:(d.usernameLower||usernameLower),role:d.role||"user",language:d.language||l||"it",pagaMensile:+d.pagaMensile||CCNL_CONFIG.minimumMonthly,percentualeOraViaggio:d.percentualeOraViaggio??100,indennitaTrasferta:+d.indennitaTrasferta||0,indennitaTrasfertaFactor:+d.indennitaTrasfertaFactor||1,indennitaTrasfertaTaxable:!!d.indennitaTrasfertaTaxable,ferieResidueIniziali:+d.ferieResidueIniziali||0,rolResidueIniziali:+d.rolResidueIniziali||0,exfestResidueIniziali:+d.exfestResidueIniziali||0,ferieMaturazioneMensile:+d.ferieMaturazioneMensile||CCNL_CONFIG.accrual.ferie,rolMaturazioneMensile:+d.rolMaturazioneMensile||CCNL_CONFIG.accrual.rol,exfestMaturazioneMensile:+d.exfestMaturazioneMensile||CCNL_CONFIG.accrual.exfest};saveSession()}
+function subscribe(){if(unsub)unsub();let q=query(entriesCol,where("uid","==",session.uid));unsub=onSnapshot(q,s=>{let all=s.docs.map(d=>Object.assign({id:d.id},d.data()));myEvents=all.filter(x=>x.kind==="event").sort((a,b)=>(a.date||"").localeCompare(b.date||"")||(a.time||"").localeCompare(b.time||""));outsidePeriods=all.filter(x=>x.kind==="outsidePeriod");myAbsences=all.filter(x=>x.kind==="absence");renderState();renderToday();renderHistory()},e=>console.error(e))}
+function enterApp(){setLang(session.language||"it");show("appView");$("sessionUser").textContent=session.username;subscribe()}
+function enterAdmin(){setLang(session.language||"it");show("adminView");$("adminSession").textContent=session.username;subscribeUsers()}
+function subscribeUsers(){onSnapshot(usersCol,s=>{window.adminUsers=s.docs.map(d=>Object.assign({uid:d.id},d.data())).filter(u=>u.role!=="admin").sort((a,b)=>(a.username||"").localeCompare(b.username||""));renderAdminUsers()},e=>console.error(e))}
+function renderAdminUsers(){let box=$("adminUsers"),t=T[lang];box.innerHTML="";let arr=window.adminUsers||[];if(!arr.length){box.innerHTML='<div class="empty">'+t.noData+"</div>";return}arr.forEach(u=>{let d=document.createElement("div");d.className="admin-user";d.innerHTML='<span><strong>'+safe(u.username)+'</strong><br><small>'+safe((u.language||"it").toUpperCase())+'</small></span><span class="btn-row"><button class="btn btn-secondary open-user">'+t.open+'</button><button class="btn btn-secondary pass-user">'+t.changePassword+'</button><button class="btn btn-danger del-user">'+t.deleteUser+'</button></span>';let openBtn=d.querySelector(".open-user"),passBtn=d.querySelector(".pass-user"),delBtn=d.querySelector(".del-user");openBtn.addEventListener("click",()=>openAdmin(u));passBtn.addEventListener("click",()=>adminPassword(u));delBtn.addEventListener("click",()=>deleteUser(u));box.appendChild(d);feedbackButton(openBtn);feedbackButton(passBtn);feedbackButton(delBtn)})}
+function openAdmin(u){adminUser=u;$("adminReport").classList.remove("hidden");$("adminTitle").textContent="Report — "+u.username;$("adminBack").textContent=T[lang].back;adminMonthYM=currentYM();if(unsubAdmin)unsubAdmin();let q=query(entriesCol,where("uid","==",u.uid));unsubAdmin=onSnapshot(q,s=>{let all=s.docs.map(d=>Object.assign({id:d.id},d.data()));adminEvents=all.filter(x=>x.kind==="event");adminPeriods=all.filter(x=>x.kind==="outsidePeriod");adminAbsences=all.filter(x=>x.kind==="absence");renderAdminHistory()})}
+function renderAdminHistory(){let t=T[lang];$("adminMonthMain").textContent=ymLabel(adminMonthYM);let days=new Set(adminEvents.filter(e=>e.date?.startsWith(adminMonthYM)).map(e=>e.date));outsideDatesInMonth(adminPeriods,adminMonthYM).forEach(d=>days.add(d));let arr=[...days].sort().reverse(),h="";if(arr.length){let s=computeSummary(adminEvents,adminPeriods,adminMonthYM,ratesOf(adminUser),adminAbsences);let adminNights=nightsAwayInMonth(adminEvents,adminMonthYM);h='<table><thead><tr><th>Data</th><th>Giorno</th><th class="valcol"><span class="th-ico">🚚</span><span class="th-lbl">'+t.colTravel+'</span></th><th class="valcol"><span class="th-ico">🟢</span><span class="th-lbl">'+t.colWork+'</span></th><th class="valcol"><span class="th-ico">🌞</span><span class="th-lbl">'+t.colDay+'</span></th><th class="valcol"><span class="th-ico">🌙</span><span class="th-lbl">'+t.colNight+'</span></th><th class="valcol"><span class="th-ico">☕</span><span class="th-lbl">'+t.colBreak+'</span></th><th class="valcol"><span class="th-ico">🏨</span><span class="th-lbl">'+t.colOutside+'</span></th></tr></thead><tbody>';for(let d of arr){let m=minutesForDay(adminEvents.filter(e=>e.date===d)),out=adminNights.has(d);h+='<tr><td>'+d.split("-").reverse().join("/")+'</td><td>'+dayName(d).slice(0,3)+'</td><td class="valcol">'+fmtMin(m.travel)+'</td><td class="valcol">'+fmtMin(m.work)+'</td><td class="valcol">'+fmtMin(m.workDay)+'</td><td class="valcol">'+fmtMin(m.workNight)+'</td><td class="valcol">'+fmtMin(m.br)+'</td><td class="valcol">'+(out?"✓":"—")+"</td></tr>"}h+='</tbody><tfoot><tr><td>'+t.colTotal+'</td><td></td><td class="valcol tot-travel">'+fmtMin(s.travel)+'</td><td class="valcol tot-work">'+fmtMin(s.work)+'</td><td class="valcol">'+fmtMin(s.workDay)+'</td><td class="valcol">'+fmtMin(s.workNight)+'</td><td class="valcol">'+fmtMin(s.br)+'</td><td class="valcol">'+s.outside+'</td></tr></tfoot></table>'}else h='<div class="empty">'+t.noData+"</div>";$("adminHistory").innerHTML=h}
+
+function boot(){
+  onAuthStateChanged(auth, async (u) => {
+    if(u){
+      try{
+        let s = await getDoc(doc(usersCol, u.uid));
+        if(s.exists()){
+          let d = s.data();
+          session = {
+            uid: u.uid,
+            username: d.username,
+            usernameLower: d.usernameLower,
+            role: d.role || "user",
+            language: d.language || "it",
+            pagaMensile: +d.pagaMensile || CCNL_CONFIG.minimumMonthly,
+            percentualeOraViaggio: d.percentualeOraViaggio ?? 100,
+            indennitaTrasferta: +d.indennitaTrasferta || 0,
+            indennitaTrasfertaFactor: +d.indennitaTrasfertaFactor || 1,
+            indennitaTrasfertaTaxable: !!d.indennitaTrasfertaTaxable,
+            ferieResidueIniziali: +d.ferieResidueIniziali || 0,
+            rolResidueIniziali: +d.rolResidueIniziali || 0,
+            exfestResidueIniziali: +d.exfestResidueIniziali || 0,
+            ferieMaturazioneMensile: +d.ferieMaturazioneMensile || CCNL_CONFIG.accrual.ferie,
+            rolMaturazioneMensile: +d.rolMaturazioneMensile || CCNL_CONFIG.accrual.rol,
+            exfestMaturazioneMensile: +d.exfestMaturazioneMensile || CCNL_CONFIG.accrual.exfest
+          };
+          saveSession();
+          if(session.role === "admin") enterAdmin();
+          else enterApp();
+          return;
+        }
+      }catch(e){ console.error(e); }
+    }
+    clearSession();
+    show("loginView");
+    setLang("it");
+  });
+}
+boot();
+</script></body></html>
