@@ -1,0 +1,1285 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>BST SRL - Gestionale Rapporti Lavorazioni</title>
+
+  <!-- Tailwind CSS per Interfaccia Responsive Mobile/Desktop -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome Icone -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- Firebase SDKs (Compatibility Version per Single-File Web App) -->
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+
+  <style>
+    body { -webkit-tap-highlight-color: transparent; }
+    canvas { touch-action: none; }
+  </style>
+</head>
+<body class="bg-slate-100 text-slate-800 font-sans pb-24">
+
+  <!-- BARRA DI NAVIGAZIONE SUPERIORE FISSA -->
+  <header class="bg-slate-900 text-white p-4 sticky top-0 z-50 shadow-md flex justify-between items-center">
+    <div>
+      <h1 class="font-bold text-base leading-tight flex items-center gap-2">
+        <span>BST SRL</span>
+        <span id="demo-tag" class="text-[10px] bg-amber-500 text-slate-900 px-1.5 py-0.5 rounded font-bold">MODO DEMO</span>
+      </h1>
+      <p class="text-xs text-slate-400" id="user-display">Non connesso</p>
+    </div>
+
+    <div class="flex items-center gap-2">
+      <!-- Selettore Vista Admin / Field -->
+      <div id="admin-view-toggle" class="hidden bg-slate-800 p-1 rounded-lg border border-slate-700 flex text-xs">
+        <button onclick="switchView('mobile')" id="btn-view-mobile" class="px-2.5 py-1 rounded-md font-semibold bg-blue-600 text-white">
+          <i class="fa-solid fa-mobile-screen"></i> Field
+        </button>
+        <button onclick="switchView('admin')" id="btn-view-admin" class="px-2.5 py-1 rounded-md font-semibold text-slate-400 hover:text-white">
+          <i class="fa-solid fa-chart-pie"></i> Admin
+        </button>
+      </div>
+
+      <button onclick="logout()" id="btn-logout" class="hidden text-xs bg-slate-800 hover:bg-slate-700 p-2 rounded-lg text-slate-300">
+        <i class="fa-solid fa-right-from-bracket"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- SEZIONE 0: ACCESSO / LOGIN -->
+  <section id="view-login" class="max-w-md mx-auto p-4 space-y-4 my-8">
+    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 text-center space-y-4">
+      <div class="w-12 h-12 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mx-auto text-xl">
+        <i class="fa-solid fa-user-lock"></i>
+      </div>
+      <div>
+        <h2 class="text-lg font-bold text-slate-800">Accesso Gestionale</h2>
+        <p class="text-xs text-slate-500">Inserisci le credenziali per iniziare la giornata</p>
+      </div>
+
+      <div class="space-y-3 text-left">
+        <div>
+          <label class="block text-xs font-semibold text-slate-600 mb-1">Email</label>
+          <input type="email" id="login-email" autocomplete="username" placeholder="es. gabriele@bst.it" class="w-full text-sm p-2.5 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-600 mb-1">Password</label>
+          <input type="password" id="login-password" autocomplete="current-password" placeholder="••••••••" class="w-full text-sm p-2.5 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
+        </div>
+      </div>
+
+      <p id="login-error" class="hidden text-xs font-semibold text-red-600 bg-red-50 border border-red-200 rounded-lg p-2 text-left"></p>
+
+      <button onclick="login()" id="btn-login" class="w-full py-3 bg-blue-600 text-white font-bold text-sm rounded-xl shadow hover:bg-blue-700 transition disabled:opacity-60">
+        ACCEDI ORA
+      </button>
+
+      <div class="pt-2 border-t border-slate-100 space-y-1">
+        <p class="text-[11px] text-slate-400">Modalità prova locale (senza Firebase, dati solo su questo dispositivo)</p>
+        <div class="flex justify-center gap-4">
+          <button onclick="startDemoMode('caposquadra')" class="text-xs text-slate-500 underline font-medium">Prova come Caposquadra</button>
+          <button onclick="startDemoMode('admin')" class="text-xs text-slate-500 underline font-medium">Prova come Admin</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- VISTA 1: FORM MOBILE PER RESPONSABILE SQUADRA -->
+  <main id="view-mobile" class="hidden max-w-md mx-auto p-3 space-y-4">
+
+    <!-- CRONOMETRO E BOTTONI LIVE -->
+    <section class="bg-white rounded-xl shadow-sm border border-slate-200 p-4 space-y-3">
+      <div class="flex justify-between items-center">
+        <h2 class="text-xs font-bold uppercase tracking-wider text-slate-500 flex items-center gap-1.5">
+          <i class="fa-solid fa-stopwatch text-blue-600"></i> Cronometro Lavoro
+        </h2>
+        <span id="badge-stato" class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-200 text-slate-700">IDLE</span>
+      </div>
+
+      <div class="grid grid-cols-2 gap-2 bg-slate-50 p-3 rounded-lg text-center border border-slate-100">
+        <div>
+          <span class="text-[10px] uppercase text-slate-400 block font-bold">Inizio Lavoro</span>
+          <span id="disp-inizio-lavoro" class="text-xs font-bold text-slate-700">--:--</span>
+        </div>
+        <div>
+          <span class="text-[10px] uppercase text-slate-400 block font-bold">Target 8 Ore</span>
+          <span id="disp-target-fine" class="text-xs font-bold text-emerald-600">--:--</span>
+        </div>
+        <div>
+          <span class="text-[10px] uppercase text-slate-400 block font-bold">Pausa Pranzo</span>
+          <span id="disp-pausa-durata" class="text-xs font-bold text-slate-700">0 min</span>
+        </div>
+        <div>
+          <span class="text-[10px] uppercase text-slate-400 block font-bold">Ore Lavoro Tot</span>
+          <span id="disp-ore-lavoro" class="text-xs font-bold text-blue-600">0.0 h</span>
+        </div>
+      </div>
+
+      <div id="action-buttons" class="grid grid-cols-1 gap-2 pt-1"></div>
+    </section>
+
+    <!-- INTESTAZIONE CANTIERE -->
+    <section class="bg-white rounded-xl shadow-sm border border-slate-200 p-4 space-y-3">
+      <h2 class="text-xs font-bold uppercase tracking-wider text-slate-500 flex items-center gap-1.5">
+        <i class="fa-solid fa-building text-blue-600"></i> Cliente & Cantiere
+      </h2>
+      <div class="grid grid-cols-2 gap-2">
+        <div>
+          <label class="block text-[11px] font-semibold text-slate-600 mb-1">Data</label>
+          <input type="date" id="field-data" class="w-full text-xs p-2 border rounded-lg bg-slate-50 font-bold">
+        </div>
+        <div>
+          <label class="block text-[11px] font-semibold text-slate-600 mb-1">Stato Scheda</label>
+          <select id="field-stato" class="w-full text-xs p-2 border rounded-lg bg-slate-50">
+            <option value="Caricare">Caricare</option>
+            <option value="Non Caricare">Non Caricare</option>
+            <option value="Trasmesso per mail">Trasmesso per mail</option>
+          </select>
+        </div>
+      </div>
+      <div>
+        <label class="block text-[11px] font-semibold text-slate-600 mb-1">Cliente *</label>
+        <input type="text" id="field-cliente" placeholder="Es. BST SRL / Azienda X" class="w-full text-xs p-2 border rounded-lg">
+      </div>
+      <div class="grid grid-cols-2 gap-2">
+        <div>
+          <label class="block text-[11px] font-semibold text-slate-600 mb-1">Città / Località</label>
+          <input type="text" id="field-citta" placeholder="Es. Leno (BS)" class="w-full text-xs p-2 border rounded-lg">
+        </div>
+        <div class="flex items-center pt-4">
+          <label class="inline-flex items-center cursor-pointer">
+            <input type="checkbox" id="field-garanzia" class="sr-only peer">
+            <div class="relative w-8 h-4 shrink-0 bg-slate-200 rounded-full peer-checked:bg-blue-600 peer-checked:after:translate-x-4 after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-3 after:w-3 after:transition-all"></div>
+            <span class="ml-2 text-xs font-semibold text-slate-700">Garanzia?</span>
+          </label>
+        </div>
+      </div>
+    </section>
+
+    <!-- SQUADRA DEL GIORNO -->
+    <section class="bg-white rounded-xl shadow-sm border border-slate-200 p-4 space-y-3">
+      <div class="flex justify-between items-center">
+        <h2 class="text-xs font-bold uppercase tracking-wider text-slate-500 flex items-center gap-1.5">
+          <i class="fa-solid fa-users text-blue-600"></i> Squadra del Giorno
+        </h2>
+        <button onclick="addTecnico()" class="text-xs text-blue-600 font-bold flex items-center gap-1">
+          <i class="fa-solid fa-user-plus"></i> Collega
+        </button>
+      </div>
+      <div id="tecnici-list" class="space-y-2"></div>
+    </section>
+
+    <!-- TRASFERTA & N° MEZZO -->
+    <section class="bg-white rounded-xl shadow-sm border border-slate-200 p-4 space-y-3">
+      <h2 class="text-xs font-bold uppercase tracking-wider text-slate-500 flex items-center gap-1.5">
+        <i class="fa-solid fa-truck-field text-blue-600"></i> Trasferta & Mezzo Flotta
+      </h2>
+
+      <div class="grid grid-cols-3 gap-2 text-center">
+        <div class="p-2 border rounded-lg bg-slate-50">
+          <span class="text-[10px] uppercase font-bold text-slate-400 block">N° Pranzi</span>
+          <div class="flex justify-center items-center gap-2 mt-1">
+            <button onclick="changeCounter('pranzi', -1)" class="w-6 h-6 bg-slate-200 rounded font-bold">-</button>
+            <span id="cnt-pranzi" class="font-bold text-xs">0</span>
+            <button onclick="changeCounter('pranzi', 1)" class="w-6 h-6 bg-blue-600 text-white rounded font-bold">+</button>
+          </div>
+        </div>
+        <div class="p-2 border rounded-lg bg-slate-50">
+          <span class="text-[10px] uppercase font-bold text-slate-400 block">N° Cene</span>
+          <div class="flex justify-center items-center gap-2 mt-1">
+            <button onclick="changeCounter('cene', -1)" class="w-6 h-6 bg-slate-200 rounded font-bold">-</button>
+            <span id="cnt-cene" class="font-bold text-xs">0</span>
+            <button onclick="changeCounter('cene', 1)" class="w-6 h-6 bg-blue-600 text-white rounded font-bold">+</button>
+          </div>
+        </div>
+        <div class="p-2 border rounded-lg bg-slate-50">
+          <span class="text-[10px] uppercase font-bold text-slate-400 block">N° Notti</span>
+          <div class="flex justify-center items-center gap-2 mt-1">
+            <button onclick="changeCounter('notti', -1)" class="w-6 h-6 bg-slate-200 rounded font-bold">-</button>
+            <span id="cnt-notti" class="font-bold text-xs">0</span>
+            <button onclick="changeCounter('notti', 1)" class="w-6 h-6 bg-blue-600 text-white rounded font-bold">+</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2 gap-2 pt-1">
+        <div>
+          <label class="block text-[11px] font-semibold text-slate-600 mb-1">N° Mezzo (Codice Es. 34)</label>
+          <input type="text" id="field-codice-mezzo" placeholder="es. 34, 42" class="w-full text-xs p-2 border rounded-lg font-bold">
+        </div>
+        <div>
+          <label class="block text-[11px] font-semibold text-slate-600 mb-1">Km Viaggio Totali</label>
+          <input type="number" min="0" id="field-km" value="0" class="w-full text-xs p-2 border rounded-lg font-bold text-blue-700">
+        </div>
+      </div>
+    </section>
+
+    <!-- MEZZI E ORE MACCHINA -->
+    <section class="bg-white rounded-xl shadow-sm border border-slate-200 p-4 space-y-3">
+      <h2 class="text-xs font-bold uppercase tracking-wider text-slate-500 flex items-center gap-1.5">
+        <i class="fa-solid fa-screwdriver-wrench text-blue-600"></i> Ore Funzionamento Macchine
+      </h2>
+
+      <div class="space-y-2 text-xs">
+        <div class="flex items-center justify-between p-2 border rounded-lg">
+          <span class="font-semibold text-slate-700">PLE 1</span>
+          <div class="flex items-center gap-1">
+            <span class="text-[10px] text-slate-400">Ore:</span>
+            <input type="number" min="0" step="0.5" id="ore-ple1" value="0" class="w-16 p-1 border rounded text-center font-bold">
+          </div>
+        </div>
+        <div class="flex items-center justify-between p-2 border rounded-lg">
+          <span class="font-semibold text-slate-700">PLE 2</span>
+          <div class="flex items-center gap-1">
+            <span class="text-[10px] text-slate-400">Ore:</span>
+            <input type="number" min="0" step="0.5" id="ore-ple2" value="0" class="w-16 p-1 border rounded text-center font-bold">
+          </div>
+        </div>
+        <div class="flex items-center justify-between p-2 border rounded-lg">
+          <span class="font-semibold text-slate-700">Pantografo</span>
+          <div class="flex items-center gap-1">
+            <span class="text-[10px] text-slate-400">Ore:</span>
+            <input type="number" min="0" step="0.5" id="ore-pantografo" value="0" class="w-16 p-1 border rounded text-center font-bold">
+          </div>
+        </div>
+        <div class="flex items-center justify-between p-2 border rounded-lg">
+          <span class="font-semibold text-slate-700">Camion Gru</span>
+          <div class="flex items-center gap-1">
+            <span class="text-[10px] text-slate-400">Ore:</span>
+            <input type="number" min="0" step="0.5" id="ore-camiongru" value="0" class="w-16 p-1 border rounded text-center font-bold">
+          </div>
+        </div>
+        <div class="flex items-center justify-between p-2 border rounded-lg">
+          <span class="font-semibold text-slate-700">Autogru</span>
+          <div class="flex items-center gap-1">
+            <span class="text-[10px] text-slate-400">Ore:</span>
+            <input type="number" min="0" step="0.5" id="ore-autogru" value="0" class="w-16 p-1 border rounded text-center font-bold">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- NOTE & MATERIALI -->
+    <section class="bg-white rounded-xl shadow-sm border border-slate-200 p-4 space-y-3">
+      <h2 class="text-xs font-bold uppercase tracking-wider text-slate-500 flex items-center gap-1.5">
+        <i class="fa-solid fa-list-check text-blue-600"></i> Descrizione Lavori & Materiali
+      </h2>
+      <textarea id="field-note" rows="3" placeholder="Descrizione dettagliata dell'intervento..." class="w-full text-xs p-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"></textarea>
+
+      <div class="space-y-2 pt-2">
+        <div class="flex justify-between items-center">
+          <span class="text-[11px] font-bold text-slate-600 uppercase">Materiali Impiegati</span>
+          <button onclick="addMaterialeRow()" class="text-[11px] text-blue-600 font-bold">+ Riga Materiale</button>
+        </div>
+        <div id="materiali-table" class="space-y-2"></div>
+      </div>
+    </section>
+
+    <!-- FIRMA TOUCH -->
+    <section class="bg-white rounded-xl shadow-sm border border-slate-200 p-4 space-y-2">
+      <div class="flex justify-between items-center">
+        <h2 class="text-xs font-bold uppercase tracking-wider text-slate-500 flex items-center gap-1.5">
+          <i class="fa-solid fa-pen-nib text-blue-600"></i> Firma Autorizzazione Cliente
+        </h2>
+        <button onclick="clearSignature()" class="text-[10px] text-red-500 font-bold uppercase">Cancella</button>
+      </div>
+      <canvas id="signature-pad" class="w-full h-28 border border-slate-300 rounded-lg bg-slate-50"></canvas>
+    </section>
+
+    <!-- BARRA FISSA DI SALVATAGGIO -->
+    <div class="fixed bottom-0 left-0 right-0 bg-white border-t border-slate-200 p-3 z-50 shadow-lg">
+      <div class="max-w-md mx-auto flex gap-2">
+        <button onclick="salvaBozzaLocale()" class="w-1/3 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl border border-slate-300">
+          💾 Salva Bozza
+        </button>
+        <button onclick="inviaRapportoInCloud()" id="btn-invia" class="w-2/3 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-xl shadow flex items-center justify-center gap-2 disabled:opacity-60">
+          <i class="fa-solid fa-cloud-arrow-up"></i> INVIA RAPPORTO
+        </button>
+      </div>
+    </div>
+  </main>
+
+  <!-- VISTA 2: PANNELLO ADMIN (DASHBOARD UFFICIO) -->
+  <main id="view-admin" class="hidden max-w-5xl mx-auto p-4 space-y-6">
+
+    <!-- INTESTAZIONE E FILTRI ADMIN -->
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+      <div>
+        <h2 class="text-lg font-bold text-slate-800">Pannello Controllo Cantieri</h2>
+        <p class="text-xs text-slate-500">Riepilogo e verifica schede di tutte le squadre</p>
+      </div>
+
+      <div class="flex flex-wrap items-center gap-2">
+        <input type="date" id="admin-filter-date" class="text-xs p-2 border rounded-lg bg-slate-50 font-semibold" onchange="renderAdminDashboard()">
+        <select id="admin-filter-stato" class="text-xs p-2 border rounded-lg bg-slate-50 font-semibold" onchange="renderAdminDashboard()">
+          <option value="ALL">Tutti gli stati</option>
+          <option value="Caricare">Caricare</option>
+          <option value="Non Caricare">Non Caricare</option>
+          <option value="Trasmesso per mail">Trasmesso per mail</option>
+        </select>
+        <button onclick="renderAdminDashboard()" class="text-xs bg-slate-900 text-white p-2 rounded-lg font-semibold">
+          <i class="fa-solid fa-rotate"></i> Aggiorna
+        </button>
+      </div>
+    </div>
+
+    <!-- CARTE RIEPILOGATIVE -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+      <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm text-center">
+        <span class="text-[10px] font-bold text-slate-400 uppercase block">Totale Schede</span>
+        <span id="stat-tot-schede" class="text-xl font-extrabold text-slate-800">0</span>
+      </div>
+      <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm text-center">
+        <span class="text-[10px] font-bold text-slate-400 uppercase block">Ore Lavoro Totali</span>
+        <span id="stat-tot-lavoro" class="text-xl font-extrabold text-blue-600">0.0 h</span>
+      </div>
+      <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm text-center">
+        <span class="text-[10px] font-bold text-slate-400 uppercase block">Ore Viaggio Totali</span>
+        <span id="stat-tot-viaggio" class="text-xl font-extrabold text-amber-600">0.0 h</span>
+      </div>
+      <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm text-center">
+        <span class="text-[10px] font-bold text-slate-400 uppercase block">Pranzi Totali</span>
+        <span id="stat-tot-pranzi" class="text-xl font-extrabold text-emerald-600">0</span>
+      </div>
+    </div>
+
+    <!-- TABELLA RAPPORTO SQUADRE -->
+    <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+      <div class="p-4 border-b border-slate-100 flex justify-between items-center">
+        <h3 class="text-xs font-bold uppercase tracking-wider text-slate-500">Rapporti Inviati dalle Squadre</h3>
+        <span class="text-xs text-slate-400" id="admin-count-label">0 schede trovate</span>
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="w-full text-left text-xs text-slate-600">
+          <thead class="bg-slate-50 text-slate-400 font-bold uppercase text-[10px] border-b">
+            <tr>
+              <th class="p-3">Data</th>
+              <th class="p-3">Cliente / Città</th>
+              <th class="p-3">Caposquadra & Componenti</th>
+              <th class="p-3">Ore Lavoro / Viaggio</th>
+              <th class="p-3">Mezzo / Attrezzature</th>
+              <th class="p-3">Stato</th>
+              <th class="p-3 text-right">Azione</th>
+            </tr>
+          </thead>
+          <tbody id="admin-table-body" class="divide-y divide-slate-100">
+            <!-- Popolato dinamicamente via JS -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+
+  <!-- MODALE DETTAGLIO RAPPORTO (ADMIN) -->
+  <div id="modal-dettaglio" class="hidden fixed inset-0 z-[70] bg-slate-900/60 flex items-end md:items-center justify-center md:p-4" onclick="if (event.target === this) chiudiDettaglio()">
+    <div class="bg-white w-full md:max-w-lg max-h-[90vh] overflow-y-auto rounded-t-2xl md:rounded-2xl shadow-xl">
+      <div class="sticky top-0 bg-white border-b border-slate-100 p-4 flex justify-between items-center">
+        <h3 class="text-sm font-bold text-slate-800">Dettaglio Rapporto</h3>
+        <button onclick="chiudiDettaglio()" class="text-slate-400 hover:text-slate-700 text-lg leading-none px-1">✕</button>
+      </div>
+      <div id="modal-dettaglio-body" class="p-4 space-y-2 text-xs text-slate-700"></div>
+    </div>
+  </div>
+
+  <!-- JAVASCRIPT LOGICA INTEGRATA E FIREBASE -->
+  <script>
+    // -------------------------------------------------------------
+    // UTILITY
+    // -------------------------------------------------------------
+    const $ = (id) => document.getElementById(id);
+
+    // Escape HTML: evita che testo inserito dagli utenti rompa la pagina o inietti codice
+    function esc(s) {
+      return String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+    }
+
+    // Data locale AAAA-MM-GG (toISOString() usa UTC e dopo mezzanotte darebbe il giorno prima)
+    function oggiLocale() {
+      const d = new Date();
+      const p = (n) => String(n).padStart(2, '0');
+      return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}`;
+    }
+    function fmtData(s) {
+      return /^\d{4}-\d{2}-\d{2}$/.test(s || '') ? s.split('-').reverse().join('/') : (s || '');
+    }
+    function fmtOra(d) {
+      return d ? d.toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' }) : '--:--';
+    }
+    function fmtOraIso(s) {
+      const d = s ? new Date(s) : null;
+      return d && !isNaN(d) ? fmtOra(d) : '--:--';
+    }
+    function fmtOre(n) { return (Number(n) || 0).toFixed(1); }
+    function numVal(id) { return parseFloat($(id).value) || 0; }
+    function isoOrNull(d) { return d ? d.toISOString() : null; }
+
+    function toast(msg) {
+      const el = document.createElement('div');
+      el.className = 'fixed top-20 left-1/2 -translate-x-1/2 z-[80] bg-slate-900 text-white text-xs font-semibold px-3 py-2 rounded-lg shadow-lg max-w-[90vw] text-center';
+      el.textContent = msg;
+      document.body.appendChild(el);
+      setTimeout(() => el.remove(), 3500);
+    }
+
+    // -------------------------------------------------------------
+    // CONFIGURAZIONE FIREBASE REALE
+    // -------------------------------------------------------------
+    const firebaseConfig = {
+      apiKey: "AIzaSyDdXX4xF91oAu391nwwKLCVFo8neFcUTIA",
+      authDomain: "gestione-ore-7eba2.firebaseapp.com",
+      projectId: "gestione-ore-7eba2",
+      storageBucket: "gestione-ore-7eba2.appspot.com",
+      messagingSenderId: "1055729729831",
+      appId: "1:1055729729831:web:gestioneore"
+    };
+
+    let isDemoMode = false;
+    let db = null;
+    let auth = null;
+    let currentUser = { uid: "", email: "", role: "caposquadra", nome: "" };
+    let sessioneAttiva = false;
+    let nomeCaposquadra = "Caposquadra";
+
+    // Inizializzazione Firebase
+    try {
+      firebase.initializeApp(firebaseConfig);
+      auth = firebase.auth();
+      db = firebase.firestore();
+      $('demo-tag').classList.add('hidden');
+    } catch (e) {
+      console.log("Inizializzazione in Modalità Demo Locale", e);
+      isDemoMode = true;
+    }
+
+    // -------------------------------------------------------------
+    // LOGICA DI LOGIN E SESSIONE
+    // -------------------------------------------------------------
+    function showLoginError(msg) {
+      const el = $('login-error');
+      if (!msg) { el.classList.add('hidden'); el.textContent = ''; return; }
+      el.textContent = msg;
+      el.classList.remove('hidden');
+    }
+
+    function traduciErroreAuth(err) {
+      const m = {
+        'auth/invalid-email': 'Email non valida.',
+        'auth/user-not-found': 'Email o password errata.',
+        'auth/wrong-password': 'Email o password errata.',
+        'auth/invalid-credential': 'Email o password errata.',
+        'auth/user-disabled': 'Account disabilitato.',
+        'auth/too-many-requests': 'Troppi tentativi. Riprova tra qualche minuto.',
+        'auth/network-request-failed': 'Nessuna connessione. Riprova.'
+      };
+      return m[err && err.code] || ('Errore di accesso: ' + (err && err.message ? err.message : err));
+    }
+
+    function setLoginBusy(busy) {
+      const b = $('btn-login');
+      b.disabled = busy;
+      b.innerText = busy ? 'ACCESSO IN CORSO…' : 'ACCEDI ORA';
+    }
+
+    async function login() {
+      const email = $('login-email').value.trim();
+      const pass = $('login-password').value;
+      showLoginError('');
+
+      if (!email || !pass) { showLoginError('Inserisci email e password.'); return; }
+      if (!auth) { showLoginError('Firebase non disponibile. Usa la modalità prova locale.'); return; }
+
+      setLoginBusy(true);
+      try {
+        // La sessione parte da onAuthStateChanged, solo se l'accesso riesce davvero
+        await auth.signInWithEmailAndPassword(email, pass);
+      } catch (err) {
+        showLoginError(traduciErroreAuth(err));
+      } finally {
+        setLoginBusy(false);
+      }
+    }
+    $('login-password').addEventListener('keydown', (e) => { if (e.key === 'Enter') login(); });
+
+    // Il ruolo NON si sceglie da un menu: si legge dal profilo utente su Firestore (utenti/{uid})
+    async function caricaProfilo(user) {
+      const snap = await db.collection('utenti').doc(user.uid).get();
+      const d = snap.exists ? snap.data() : {};
+      const ruolo = String(d.role || d.ruolo || '').toLowerCase() === 'admin' ? 'admin' : 'caposquadra';
+      return { role: ruolo, nome: d.nome || d.name || d.displayName || '' };
+    }
+
+    if (auth) {
+      auth.onAuthStateChanged(async (user) => {
+        if (!user || isDemoMode || sessioneAttiva) return;
+        try {
+          const p = await caricaProfilo(user);
+          currentUser = { uid: user.uid, email: user.email || '', role: p.role, nome: p.nome };
+          setupUserSession();
+        } catch (err) {
+          showLoginError('Accesso riuscito ma profilo utente non leggibile: ' + err.message);
+          auth.signOut();
+        }
+      });
+    }
+
+    function startDemoMode(role) {
+      isDemoMode = true;
+      $('demo-tag').classList.remove('hidden');
+      currentUser = { uid: 'demo', email: 'demo@bst.it', role: role === 'admin' ? 'admin' : 'caposquadra', nome: '' };
+      setupUserSession();
+    }
+
+    function nomeDaEmail(email) {
+      const base = (email || '').split('@')[0].replace(/[._-]+/g, ' ').trim();
+      return base ? base.replace(/\b\w/g, c => c.toUpperCase()) : 'Caposquadra';
+    }
+
+    function setupUserSession() {
+      sessioneAttiva = true;
+      showLoginError('');
+      $('view-login').classList.add('hidden');
+      $('user-display').innerText = `${currentUser.email} (${currentUser.role})`;
+      $('btn-logout').classList.remove('hidden');
+
+      nomeCaposquadra = currentUser.nome || nomeDaEmail(currentUser.email);
+      nuovaSquadra();
+      const ripristinata = ripristinaBozza();
+      renderTecnici();
+      renderStateButtons();
+      aggiornaDisplayTimer();
+
+      if (currentUser.role === 'admin') {
+        $('admin-view-toggle').classList.remove('hidden');
+        switchView('admin');
+      } else {
+        switchView('mobile');
+      }
+      if (ripristinata) toast('Bozza precedente ripristinata');
+    }
+
+    async function logout() {
+      try { if (auth && !isDemoMode) await auth.signOut(); } catch (e) { /* si ricarica comunque */ }
+      location.reload();
+    }
+
+    function switchView(viewName) {
+      if (viewName === 'admin' && currentUser.role !== 'admin') return;
+
+      if (viewName === 'mobile') {
+        $('view-mobile').classList.remove('hidden');
+        $('view-admin').classList.add('hidden');
+        $('btn-view-mobile').className = "px-2.5 py-1 rounded-md font-semibold bg-blue-600 text-white";
+        $('btn-view-admin').className = "px-2.5 py-1 rounded-md font-semibold text-slate-400 hover:text-white";
+        resizeCanvas(true); // il canvas va dimensionato solo quando è visibile
+      } else {
+        $('view-mobile').classList.add('hidden');
+        $('view-admin').classList.remove('hidden');
+        $('btn-view-admin').className = "px-2.5 py-1 rounded-md font-semibold bg-blue-600 text-white";
+        $('btn-view-mobile').className = "px-2.5 py-1 rounded-md font-semibold text-slate-400 hover:text-white";
+        renderAdminDashboard();
+      }
+    }
+
+    // -------------------------------------------------------------
+    // LOGICA CAMPI E CRONOMETRO MOBILE
+    // -------------------------------------------------------------
+    $('field-data').value = oggiLocale();
+    $('admin-filter-date').value = oggiLocale();
+
+    let currentState = 'IDLE';
+    let timestamps = { arrivoCantiere: null, inizioPausa: null, durataPausaMinuti: 0, fineCantiere: null };
+    let counters = { pranzi: 0, cene: 0, notti: 0 };
+
+    function renderStateButtons() {
+      const container = $('action-buttons');
+      const badge = $('badge-stato');
+      container.innerHTML = '';
+
+      if (currentState === 'IDLE') {
+        badge.innerText = "IDLE";
+        badge.className = "px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-200 text-slate-700";
+        container.innerHTML = `<button onclick="handleStateChange('START_CANTIERE')" class="w-full py-3 bg-emerald-600 text-white font-bold text-xs rounded-xl shadow">🏗️ ARRIVO IN CANTIERE (Inizio Lavoro)</button>`;
+      }
+      else if (currentState === 'CANTIERE') {
+        badge.innerText = "AL LAVORO";
+        badge.className = "px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-600 text-white";
+        container.innerHTML = `
+          <div class="grid grid-cols-2 gap-2">
+            <button onclick="handleStateChange('START_PAUSA')" class="py-3 bg-amber-500 text-white font-bold text-xs rounded-xl shadow">🥪 PAUSA PRANZO</button>
+            <button onclick="handleStateChange('FINE_CANTIERE')" class="py-3 bg-red-600 text-white font-bold text-xs rounded-xl shadow">🛑 FINE LAVORO</button>
+          </div>
+        `;
+      }
+      else if (currentState === 'PAUSA_PRANZO') {
+        badge.innerText = "IN PAUSA";
+        badge.className = "px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-600 text-white";
+        container.innerHTML = `<button onclick="handleStateChange('FINE_PAUSA')" class="w-full py-3 bg-emerald-600 text-white font-bold text-xs rounded-xl shadow">🏁 FINE PAUSA PRANZO</button>`;
+      }
+      else if (currentState === 'FINITO') {
+        badge.innerText = "COMPLETATO";
+        badge.className = "px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-900 text-white";
+        container.innerHTML = `
+          <div class="text-center p-2 bg-emerald-50 text-emerald-800 text-xs font-bold rounded-lg border border-emerald-200">✓ Lavoro in cantiere terminato</div>
+          <button onclick="handleStateChange('RIAPRI')" class="w-full py-2 bg-slate-100 text-slate-600 font-semibold text-[11px] rounded-lg border border-slate-300">↩ Annulla fine lavoro (ho premuto per errore)</button>
+        `;
+      }
+    }
+
+    function pausaTotaleMinuti() {
+      let p = timestamps.durataPausaMinuti;
+      if (currentState === 'PAUSA_PRANZO' && timestamps.inizioPausa) {
+        p += Math.max(0, Math.round((new Date() - timestamps.inizioPausa) / 60000));
+      }
+      return p;
+    }
+
+    function minutiLavoroNetti() {
+      if (!timestamps.arrivoCantiere) return 0;
+      const fine = timestamps.fineCantiere || new Date();
+      return Math.max(0, Math.round((fine - timestamps.arrivoCantiere) / 60000) - pausaTotaleMinuti());
+    }
+
+    function aggiornaDisplayTimer() {
+      const arrivo = timestamps.arrivoCantiere;
+      if (!arrivo) {
+        $('disp-inizio-lavoro').innerText = '--:--';
+        $('disp-target-fine').innerText = '--:--';
+        $('disp-pausa-durata').innerText = '0 min';
+        $('disp-ore-lavoro').innerText = '0.0 h';
+        return;
+      }
+      const pausa = pausaTotaleMinuti();
+      $('disp-inizio-lavoro').innerText = fmtOra(arrivo);
+      $('disp-pausa-durata').innerText = pausa + ' min';
+      $('disp-target-fine').innerText = fmtOra(new Date(arrivo.getTime() + 8 * 3600000 + pausa * 60000));
+
+      const ore = Number((minutiLavoroNetti() / 60).toFixed(2));
+      $('disp-ore-lavoro').innerText = ore.toFixed(2) + ' h';
+
+      // Aggiorna le ore lavoro di chi non le ha modificate a mano
+      tecniciList.forEach(t => {
+        if (t.lavoroManuale) return;
+        t.oreLavoro = ore;
+        const inp = $(`tec-${t.id}-lavoro`);
+        if (inp && document.activeElement !== inp) inp.value = ore;
+      });
+    }
+
+    function handleStateChange(action) {
+      const now = new Date();
+
+      if (action === 'START_CANTIERE') {
+        timestamps.arrivoCantiere = now;
+        currentState = 'CANTIERE';
+      } else if (action === 'START_PAUSA') {
+        timestamps.inizioPausa = now;
+        currentState = 'PAUSA_PRANZO';
+      } else if (action === 'FINE_PAUSA') {
+        const diffMin = Math.round((now - timestamps.inizioPausa) / 60000);
+        timestamps.durataPausaMinuti += Math.max(0, diffMin);
+        timestamps.inizioPausa = null;
+        if (counters.pranzi === 0) changeCounter('pranzi', 1);
+        currentState = 'CANTIERE';
+      } else if (action === 'FINE_CANTIERE') {
+        timestamps.fineCantiere = now;
+        currentState = 'FINITO';
+      } else if (action === 'RIAPRI') {
+        timestamps.fineCantiere = null;
+        currentState = 'CANTIERE';
+      }
+      aggiornaDisplayTimer();
+      renderStateButtons();
+      programmaAutosave();
+    }
+
+    // Aggiorna il cronometro ogni 30 s e quando l'app torna in primo piano
+    setInterval(() => {
+      if (currentState === 'CANTIERE' || currentState === 'PAUSA_PRANZO') aggiornaDisplayTimer();
+    }, 30000);
+    document.addEventListener('visibilitychange', () => { if (!document.hidden) aggiornaDisplayTimer(); });
+
+    function aggiornaContatori() {
+      Object.keys(counters).forEach(k => { $(`cnt-${k}`).innerText = counters[k]; });
+    }
+
+    function changeCounter(key, val) {
+      counters[key] = Math.max(0, counters[key] + val);
+      $(`cnt-${key}`).innerText = counters[key];
+      programmaAutosave();
+    }
+
+    // GESTIONE SQUADRA DINAMICA (i valori vivono nello stato, non solo nel DOM)
+    let nextTecnicoId = 1;
+    let tecniciList = [];
+
+    function nuovaSquadra() {
+      nextTecnicoId = 1;
+      tecniciList = [{ id: nextTecnicoId++, nome: nomeCaposquadra, ruolo: "Caposquadra", oreLavoro: 0, oreViaggio: 0, lavoroManuale: false }];
+    }
+
+    function renderTecnici() {
+      const container = $('tecnici-list');
+      container.innerHTML = '';
+      tecniciList.forEach((t, index) => {
+        const div = document.createElement('div');
+        div.className = "p-2.5 bg-slate-50 rounded-lg border border-slate-200 space-y-2";
+        div.innerHTML = `
+          <div class="flex justify-between items-center gap-2">
+            <input type="text" data-id="${t.id}" data-campo="nome" class="min-w-0 flex-1 font-bold text-xs bg-transparent border-b border-dashed border-slate-400 focus:outline-none">
+            <div class="flex items-center gap-1 shrink-0">
+              <span class="text-[10px] font-semibold px-1.5 py-0.5 bg-blue-100 text-blue-800 rounded">${esc(t.ruolo)}</span>
+              ${index > 0 ? `<button onclick="removeTecnico(${t.id})" class="text-xs text-red-500 font-bold px-1">✕</button>` : ''}
+            </div>
+          </div>
+          <div class="grid grid-cols-2 gap-2 text-[11px]">
+            <div>
+              <span class="text-slate-400">Ore Lavoro:</span>
+              <input type="number" min="0" step="0.25" id="tec-${t.id}-lavoro" data-id="${t.id}" data-campo="oreLavoro" class="w-full p-1 border rounded font-semibold text-slate-800">
+            </div>
+            <div>
+              <span class="text-slate-400">Ore Viaggio:</span>
+              <input type="number" min="0" step="0.25" id="tec-${t.id}-viaggio" data-id="${t.id}" data-campo="oreViaggio" class="w-full p-1 border rounded font-semibold text-slate-800">
+            </div>
+          </div>
+        `;
+        container.appendChild(div);
+        // i valori si assegnano via DOM (mai dentro l'HTML): nomi con virgolette non rompono nulla
+        div.querySelector('[data-campo="nome"]').value = t.nome;
+        $(`tec-${t.id}-lavoro`).value = t.oreLavoro;
+        $(`tec-${t.id}-viaggio`).value = t.oreViaggio;
+      });
+    }
+
+    $('tecnici-list').addEventListener('input', (e) => {
+      const el = e.target;
+      const t = tecniciList.find(x => x.id === Number(el.dataset.id));
+      if (!t) return;
+      const campo = el.dataset.campo;
+      if (campo === 'nome') {
+        t.nome = el.value;
+      } else {
+        t[campo] = parseFloat(el.value) || 0;
+        if (campo === 'oreLavoro') t.lavoroManuale = true;
+      }
+    });
+
+    function addTecnico() {
+      const oreAttuali = Number((minutiLavoroNetti() / 60).toFixed(2));
+      tecniciList.push({ id: nextTecnicoId++, nome: `Tecnico ${tecniciList.length + 1}`, ruolo: "Tecnico", oreLavoro: oreAttuali, oreViaggio: 0, lavoroManuale: false });
+      renderTecnici();
+      programmaAutosave();
+    }
+
+    function removeTecnico(id) {
+      tecniciList = tecniciList.filter(t => t.id !== id);
+      renderTecnici();
+      programmaAutosave();
+    }
+
+    function addMaterialeRow(qta = '', desc = '') {
+      const container = $('materiali-table');
+      const div = document.createElement('div');
+      div.className = "flex gap-2";
+      div.innerHTML = `
+        <input type="text" placeholder="Q.tà" class="mat-qta w-16 text-xs p-1.5 border rounded-lg">
+        <input type="text" placeholder="Descrizione materiale" class="mat-desc flex-1 text-xs p-1.5 border rounded-lg">
+      `;
+      div.querySelector('.mat-qta').value = qta;
+      div.querySelector('.mat-desc').value = desc;
+      container.appendChild(div);
+    }
+
+    // -------------------------------------------------------------
+    // FIRMA (mouse + touch + penna tramite Pointer Events)
+    // -------------------------------------------------------------
+    const canvas = $('signature-pad');
+    const ctx = canvas.getContext('2d');
+    let isDrawing = false;
+    let firmaPresente = false;
+    let firmaPendente = null; // firma ripristinata da disegnare quando il canvas diventa visibile
+
+    function impostaContesto() {
+      ctx.lineWidth = 2;
+      ctx.strokeStyle = '#1e293b';
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+    }
+    impostaContesto();
+
+    function resizeCanvas(force = false) {
+      const w = Math.floor(canvas.parentElement.clientWidth - 32);
+      if (w <= 0) return;                         // canvas nascosto: non toccarlo
+      if (!force && w === canvas.width) return;   // es. tastiera aperta: la firma non va cancellata
+
+      const snap = firmaPendente || (firmaPresente ? canvas.toDataURL('image/png') : null);
+      firmaPendente = null;
+      canvas.width = w;
+      canvas.height = 112;
+      impostaContesto();
+      if (snap) {
+        const img = new Image();
+        img.onload = () => ctx.drawImage(img, 0, 0);
+        img.src = snap;
+      }
+    }
+    window.addEventListener('resize', () => resizeCanvas());
+
+    function getPos(e) {
+      const rect = canvas.getBoundingClientRect();
+      return {
+        x: (e.clientX - rect.left) * (canvas.width / rect.width),
+        y: (e.clientY - rect.top) * (canvas.height / rect.height)
+      };
+    }
+
+    canvas.addEventListener('pointerdown', (e) => {
+      e.preventDefault();
+      isDrawing = true;
+      canvas.setPointerCapture(e.pointerId);
+      const p = getPos(e);
+      ctx.beginPath();
+      ctx.moveTo(p.x, p.y);
+      ctx.lineTo(p.x, p.y);
+      ctx.stroke();
+      firmaPresente = true;
+    });
+
+    canvas.addEventListener('pointermove', (e) => {
+      if (!isDrawing) return;
+      e.preventDefault();
+      const p = getPos(e);
+      ctx.lineTo(p.x, p.y);
+      ctx.stroke();
+    });
+
+    function fineTratto() {
+      if (!isDrawing) return;
+      isDrawing = false;
+      programmaAutosave();
+    }
+    canvas.addEventListener('pointerup', fineTratto);
+    canvas.addEventListener('pointercancel', fineTratto);
+
+    function clearSignature() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      firmaPresente = false;
+      firmaPendente = null;
+      programmaAutosave();
+    }
+
+    function firmaDataUrl() {
+      if (!firmaPresente) return null;
+      return firmaPendente || canvas.toDataURL('image/png');
+    }
+
+    // -------------------------------------------------------------
+    // RACCOLTA DATI, BOZZA E AUTOSALVATAGGIO
+    // -------------------------------------------------------------
+    function collectFormData() {
+      const squadra = tecniciList.map(t => ({
+        nome: (t.nome || '').trim(),
+        ruolo: t.ruolo,
+        oreLavoro: Number(t.oreLavoro) || 0,
+        oreViaggio: Number(t.oreViaggio) || 0
+      }));
+
+      const materiali = [];
+      document.querySelectorAll('#materiali-table > div').forEach(row => {
+        const q = row.querySelector('.mat-qta').value.trim();
+        const d = row.querySelector('.mat-desc').value.trim();
+        if (q || d) materiali.push({ quantita: q, descrizione: d });
+      });
+
+      return {
+        uid: currentUser.uid || '',
+        data: $('field-data').value || oggiLocale(),
+        statoScheda: $('field-stato').value,
+        cliente: $('field-cliente').value.trim(),
+        citta: $('field-citta').value.trim(),
+        garanzia: $('field-garanzia').checked,
+        caposquadra: currentUser.email || nomeCaposquadra,
+        squadra: squadra,
+        logistica: {
+          pranzi: counters.pranzi,
+          cene: counters.cene,
+          notti: counters.notti,
+          codiceMezzo: $('field-codice-mezzo').value.trim(),
+          kmTotali: numVal('field-km')
+        },
+        oreAttrezzature: {
+          ple1: numVal('ore-ple1'),
+          ple2: numVal('ore-ple2'),
+          pantografo: numVal('ore-pantografo'),
+          camionGru: numVal('ore-camiongru'),
+          autogru: numVal('ore-autogru')
+        },
+        note: $('field-note').value.trim(),
+        materiali: materiali,
+        cronometro: {
+          arrivoCantiere: isoOrNull(timestamps.arrivoCantiere),
+          fineCantiere: isoOrNull(timestamps.fineCantiere),
+          pausaMinuti: timestamps.durataPausaMinuti
+        },
+        firmaPng: firmaDataUrl(),
+        timestampInvio: new Date().toISOString()
+      };
+    }
+
+    // La bozza è separata per utente (telefoni condivisi tra colleghi)
+    function chiave(nome) {
+      return `bst_${nome}_${currentUser.uid || currentUser.email || 'anon'}`;
+    }
+
+    let autosaveTimer = null;
+    function programmaAutosave() {
+      clearTimeout(autosaveTimer);
+      autosaveTimer = setTimeout(() => salvaBozza(true), 600);
+    }
+    $('view-mobile').addEventListener('input', programmaAutosave);
+    $('view-mobile').addEventListener('change', programmaAutosave);
+
+    function salvaBozza(silenziosa) {
+      if (!sessioneAttiva) return;
+      try {
+        const bozza = collectFormData();
+        bozza._ui = {
+          tecnici: tecniciList,
+          timer: {
+            stato: currentState,
+            arrivo: isoOrNull(timestamps.arrivoCantiere),
+            inizioPausa: isoOrNull(timestamps.inizioPausa),
+            pausaMin: timestamps.durataPausaMinuti,
+            fine: isoOrNull(timestamps.fineCantiere)
+          }
+        };
+        localStorage.setItem(chiave('bozza'), JSON.stringify(bozza));
+        if (!silenziosa) alert("Bozza salvata localmente sullo smartphone!");
+      } catch (e) {
+        if (!silenziosa) alert("Impossibile salvare la bozza: " + e.message);
+      }
+    }
+
+    function salvaBozzaLocale() { salvaBozza(false); }
+
+    function ripristinaBozza() {
+      let b = null;
+      try { b = JSON.parse(localStorage.getItem(chiave('bozza')) || 'null'); } catch (e) { b = null; }
+      if (!b || typeof b !== 'object') return false;
+
+      $('field-data').value = b.data || oggiLocale();
+      $('field-stato').value = b.statoScheda || 'Caricare';
+      $('field-cliente').value = b.cliente || '';
+      $('field-citta').value = b.citta || '';
+      $('field-garanzia').checked = !!b.garanzia;
+
+      const l = b.logistica || {};
+      counters = { pranzi: l.pranzi || 0, cene: l.cene || 0, notti: l.notti || 0 };
+      aggiornaContatori();
+      $('field-codice-mezzo').value = l.codiceMezzo || '';
+      $('field-km').value = l.kmTotali || 0;
+
+      const a = b.oreAttrezzature || {};
+      $('ore-ple1').value = a.ple1 || 0;
+      $('ore-ple2').value = a.ple2 || 0;
+      $('ore-pantografo').value = a.pantografo || 0;
+      $('ore-camiongru').value = a.camionGru || 0;
+      $('ore-autogru').value = a.autogru || 0;
+
+      $('field-note').value = b.note || '';
+      $('materiali-table').innerHTML = '';
+      const mats = Array.isArray(b.materiali) ? b.materiali : [];
+      mats.forEach(m => addMaterialeRow(m.quantita || '', m.descrizione || ''));
+      if (!mats.length) addMaterialeRow();
+
+      const ui = b._ui || {};
+      if (Array.isArray(ui.tecnici) && ui.tecnici.length) {
+        tecniciList = ui.tecnici.map((t, i) => ({
+          id: i + 1,
+          nome: String(t.nome || ''),
+          ruolo: i === 0 ? 'Caposquadra' : 'Tecnico',
+          oreLavoro: Number(t.oreLavoro) || 0,
+          oreViaggio: Number(t.oreViaggio) || 0,
+          lavoroManuale: !!t.lavoroManuale
+        }));
+        nextTecnicoId = tecniciList.length + 1;
+      }
+
+      // Cronometro: si ripristina solo se recente (o già concluso)
+      const tm = ui.timer;
+      if (tm && tm.arrivo && ['CANTIERE', 'PAUSA_PRANZO', 'FINITO'].includes(tm.stato)) {
+        const arrivo = new Date(tm.arrivo);
+        const vecchio = (Date.now() - arrivo.getTime()) > 24 * 3600000;
+        if (!isNaN(arrivo) && (tm.stato === 'FINITO' || !vecchio)) {
+          currentState = tm.stato;
+          timestamps = {
+            arrivoCantiere: arrivo,
+            inizioPausa: tm.inizioPausa ? new Date(tm.inizioPausa) : null,
+            durataPausaMinuti: tm.pausaMin || 0,
+            fineCantiere: tm.fine ? new Date(tm.fine) : null
+          };
+        }
+      }
+
+      if (typeof b.firmaPng === 'string' && /^data:image\/png;base64,/.test(b.firmaPng)) {
+        firmaPendente = b.firmaPng;
+        firmaPresente = true;
+      }
+      return true;
+    }
+
+    // -------------------------------------------------------------
+    // INVIO DATI IN CLOUD
+    // -------------------------------------------------------------
+    let invioInCorso = false;
+    const htmlBtnInvia = $('btn-invia').innerHTML;
+
+    function setInvioBusy(busy) {
+      const b = $('btn-invia');
+      b.disabled = busy;
+      b.innerHTML = busy ? '<i class="fa-solid fa-spinner fa-spin"></i> INVIO IN CORSO…' : htmlBtnInvia;
+    }
+
+    async function inviaRapportoInCloud() {
+      if (invioInCorso) return;
+      const payload = collectFormData();
+
+      if (!payload.cliente) {
+        alert("Inserisci il nome del cliente prima di inviare.");
+        $('field-cliente').focus();
+        return;
+      }
+      if ((currentState === 'CANTIERE' || currentState === 'PAUSA_PRANZO') &&
+          !confirm("Il cronometro è ancora attivo: le ore potrebbero non essere definitive. Inviare comunque?")) return;
+      if (!payload.firmaPng && !confirm("Manca la firma del cliente. Inviare comunque?")) return;
+
+      invioInCorso = true;
+      setInvioBusy(true);
+      salvaBozza(true); // in caso di errore o mancanza di rete la bozza resta sul telefono
+      const avviso = setTimeout(() => toast("Connessione lenta: non chiudere l'app, l'invio prosegue…"), 8000);
+
+      try {
+        if (!isDemoMode && db) {
+          await db.collection('rapporti').add({
+            ...payload,
+            creatoIl: firebase.firestore.FieldValue.serverTimestamp()
+          });
+          alert("Rapporto inviato con successo nel Database Firebase!");
+        } else {
+          const salvati = JSON.parse(localStorage.getItem('bst_rapporti_demo') || '[]');
+          salvati.push(payload);
+          localStorage.setItem('bst_rapporti_demo', JSON.stringify(salvati));
+          alert("Rapporto salvato con successo (Modalità Locale)!");
+        }
+        resetForm();
+      } catch (err) {
+        alert("Errore durante l'invio: " + err.message + "\n\nLa bozza è rimasta salvata sul telefono: puoi riprovare.");
+      } finally {
+        clearTimeout(avviso);
+        invioInCorso = false;
+        setInvioBusy(false);
+      }
+    }
+
+    function resetForm() {
+      $('field-data').value = oggiLocale();
+      $('field-stato').value = 'Caricare';
+      $('field-cliente').value = '';
+      $('field-citta').value = '';
+      $('field-garanzia').checked = false;
+      $('field-note').value = '';
+      $('field-codice-mezzo').value = '';
+      $('field-km').value = 0;
+      ['ple1', 'ple2', 'pantografo', 'camiongru', 'autogru'].forEach(k => { $(`ore-${k}`).value = 0; });
+
+      counters = { pranzi: 0, cene: 0, notti: 0 };
+      aggiornaContatori();
+
+      currentState = 'IDLE';
+      timestamps = { arrivoCantiere: null, inizioPausa: null, durataPausaMinuti: 0, fineCantiere: null };
+
+      nuovaSquadra();
+      renderTecnici();
+      $('materiali-table').innerHTML = '';
+      addMaterialeRow();
+      clearSignature();
+
+      aggiornaDisplayTimer();
+      renderStateButtons();
+
+      // per ultimo: annulla eventuali autosalvataggi pendenti ed elimina la bozza
+      clearTimeout(autosaveTimer);
+      try { localStorage.removeItem(chiave('bozza')); } catch (e) { /* nessun problema */ }
+    }
+
+    // -------------------------------------------------------------
+    // LOGICA PANNELLO ADMIN (DASHBOARD CONTROL ROOM)
+    // -------------------------------------------------------------
+    let rapportiVisibili = [];
+    let adminReq = 0;
+
+    function aggiornaStat(schede, lavoro, viaggio, pranzi) {
+      $('stat-tot-schede').innerText = schede;
+      $('stat-tot-lavoro').innerText = lavoro.toFixed(1) + " h";
+      $('stat-tot-viaggio').innerText = viaggio.toFixed(1) + " h";
+      $('stat-tot-pranzi').innerText = pranzi;
+      $('admin-count-label').innerText = `${schede} schede trovate`;
+    }
+
+    async function renderAdminDashboard() {
+      const filterDate = $('admin-filter-date').value;
+      const filterStato = $('admin-filter-stato').value;
+      const tbody = $('admin-table-body');
+      const req = ++adminReq; // scarta risposte vecchie se cambi filtro velocemente
+
+      tbody.innerHTML = `<tr><td colspan="7" class="p-6 text-center text-slate-400">Caricamento…</td></tr>`;
+
+      let rapporti = [];
+      try {
+        if (!isDemoMode && db) {
+          let q = db.collection('rapporti');
+          if (filterDate) q = q.where('data', '==', filterDate); // legge solo il giorno richiesto
+          const snap = await q.get();
+          snap.forEach(doc => rapporti.push({ id: doc.id, ...doc.data() }));
+        } else {
+          rapporti = JSON.parse(localStorage.getItem('bst_rapporti_demo') || '[]');
+        }
+      } catch (err) {
+        if (req !== adminReq) return;
+        rapportiVisibili = [];
+        tbody.innerHTML = `<tr><td colspan="7" class="p-6 text-center text-red-600 font-semibold">Errore nel caricamento: ${esc(err.message)}</td></tr>`;
+        aggiornaStat(0, 0, 0, 0);
+        return;
+      }
+      if (req !== adminReq) return;
+
+      const filtrati = rapporti
+        .filter(r => (!filterDate || r.data === filterDate) && (filterStato === 'ALL' || r.statoScheda === filterStato))
+        .sort((a, b) => String(b.timestampInvio || '').localeCompare(String(a.timestampInvio || '')));
+      rapportiVisibili = filtrati;
+
+      let totLavoro = 0, totViaggio = 0, totPranzi = 0;
+      const etichette = { ple1: 'PLE 1', ple2: 'PLE 2', pantografo: 'Pantografo', camionGru: 'Camion Gru', autogru: 'Autogru' };
+
+      const righe = filtrati.map((r, i) => {
+        const squadra = Array.isArray(r.squadra) ? r.squadra : [];
+        const lavoro = squadra.reduce((acc, s) => acc + (parseFloat(s.oreLavoro) || 0), 0);
+        const viaggio = squadra.reduce((acc, s) => acc + (parseFloat(s.oreViaggio) || 0), 0);
+        totLavoro += lavoro;
+        totViaggio += viaggio;
+        totPranzi += parseInt(r.logistica?.pranzi) || 0;
+
+        const nomiSquadra = squadra.length ? squadra.map(s => esc(s.nome)).join(', ') : 'N/D';
+        const att = r.oreAttrezzature || {};
+        const chips = Object.keys(etichette)
+          .filter(k => Number(att[k]) > 0)
+          .map(k => `<span class="inline-block px-1.5 py-0.5 bg-blue-50 border border-blue-100 text-blue-800 text-[10px] rounded font-semibold mr-1 mt-1">${etichette[k]} ${Number(att[k])}h</span>`)
+          .join('');
+
+        return `
+          <tr class="hover:bg-slate-50 border-b border-slate-100">
+            <td class="p-3 font-semibold">${esc(fmtData(r.data))}</td>
+            <td class="p-3 font-bold text-slate-800">${esc(r.cliente)}${r.garanzia ? ' <span class="text-[9px] px-1 py-0.5 bg-amber-100 text-amber-800 rounded font-bold">GARANZIA</span>' : ''}<br><span class="text-[10px] text-slate-400 font-normal">${esc(r.citta || '-')}</span></td>
+            <td class="p-3">
+              <span class="font-bold text-blue-700">${esc(r.caposquadra)}</span>
+              <div class="text-[10px] text-slate-500">${nomiSquadra}</div>
+            </td>
+            <td class="p-3">
+              <span class="font-bold text-slate-800">${lavoro.toFixed(1)}h Lavoro</span><br>
+              <span class="text-[10px] text-amber-600 font-semibold">${viaggio.toFixed(1)}h Viaggio</span>
+            </td>
+            <td class="p-3">
+              <span class="px-1.5 py-0.5 bg-slate-100 border text-[10px] rounded font-bold">Mezzo: ${esc(r.logistica?.codiceMezzo || 'N/D')}</span>
+              <div>${chips}</div>
+            </td>
+            <td class="p-3">
+              <span class="px-2 py-0.5 rounded text-[10px] font-bold ${r.statoScheda === 'Caricare' ? 'bg-emerald-100 text-emerald-800' : 'bg-slate-100 text-slate-700'}">${esc(r.statoScheda)}</span>
+            </td>
+            <td class="p-3 text-right">
+              <button onclick="apriDettaglio(${i})" class="text-blue-600 font-bold hover:underline">Vedi</button>
+            </td>
+          </tr>`;
+      });
+
+      tbody.innerHTML = righe.length
+        ? righe.join('')
+        : `<tr><td colspan="7" class="p-6 text-center text-slate-400">Nessuna scheda trovata</td></tr>`;
+      aggiornaStat(filtrati.length, totLavoro, totViaggio, totPranzi);
+    }
+
+    function apriDettaglio(i) {
+      const r = rapportiVisibili[i];
+      if (!r) return;
+
+      const riga = (l, v) => `<div class="flex justify-between gap-3"><span class="text-slate-400">${l}</span><span class="font-semibold text-right">${v}</span></div>`;
+      const titolo = (t) => `<h4 class="text-[10px] font-bold uppercase tracking-wider text-slate-400 pt-3">${t}</h4>`;
+      const log = r.logistica || {};
+      const att = r.oreAttrezzature || {};
+      const cron = r.cronometro || {};
+
+      let html = '';
+      html += riga('Data', esc(fmtData(r.data)));
+      html += riga('Cliente', esc(r.cliente));
+      html += riga('Città', esc(r.citta || '-'));
+      html += riga('Stato scheda', esc(r.statoScheda));
+      html += riga('Garanzia', r.garanzia ? 'Sì' : 'No');
+      html += riga('Inviato da', esc(r.caposquadra));
+
+      html += titolo('Squadra');
+      (Array.isArray(r.squadra) ? r.squadra : []).forEach(s => {
+        html += riga(`${esc(s.nome)} <span class="text-[10px] text-slate-400">(${esc(s.ruolo)})</span>`, `${fmtOre(s.oreLavoro)}h lavoro / ${fmtOre(s.oreViaggio)}h viaggio`);
+      });
+
+      if (cron.arrivoCantiere) {
+        html += titolo('Cronometro');
+        html += riga('Arrivo in cantiere', esc(fmtOraIso(cron.arrivoCantiere)));
+        html += riga('Fine lavoro', esc(fmtOraIso(cron.fineCantiere)));
+        html += riga('Pausa', `${Number(cron.pausaMinuti) || 0} min`);
+      }
+
+      html += titolo('Trasferta & mezzo');
+      html += riga('Pranzi / Cene / Notti', `${Number(log.pranzi) || 0} / ${Number(log.cene) || 0} / ${Number(log.notti) || 0}`);
+      html += riga('N° mezzo', esc(log.codiceMezzo || 'N/D'));
+      html += riga('Km viaggio', Number(log.kmTotali) || 0);
+
+      html += titolo('Ore macchine');
+      html += riga('PLE 1 / PLE 2', `${fmtOre(att.ple1)}h / ${fmtOre(att.ple2)}h`);
+      html += riga('Pantografo', `${fmtOre(att.pantografo)}h`);
+      html += riga('Camion Gru / Autogru', `${fmtOre(att.camionGru)}h / ${fmtOre(att.autogru)}h`);
+
+      html += titolo('Descrizione lavori');
+      html += `<p class="whitespace-pre-wrap">${esc(r.note || 'Nessuna nota')}</p>`;
+
+      html += titolo('Materiali');
+      const mats = Array.isArray(r.materiali) ? r.materiali : [];
+      html += mats.length ? mats.map(m => riga(esc(m.quantita), esc(m.descrizione))).join('') : '<p class="text-slate-400">Nessun materiale</p>';
+
+      html += titolo('Firma cliente');
+      const okFirma = typeof r.firmaPng === 'string' && /^data:image\/png;base64,[A-Za-z0-9+\/=]+$/.test(r.firmaPng);
+      html += okFirma
+        ? `<img src="${r.firmaPng}" alt="Firma cliente" class="w-full border border-slate-200 rounded-lg bg-slate-50">`
+        : '<p class="text-slate-400">Nessuna firma</p>';
+
+      $('modal-dettaglio-body').innerHTML = html;
+      $('modal-dettaglio').classList.remove('hidden');
+    }
+
+    function chiudiDettaglio() {
+      $('modal-dettaglio').classList.add('hidden');
+    }
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') chiudiDettaglio(); });
+
+    // -------------------------------------------------------------
+    // Inizializzazione controlli al caricamento
+    // -------------------------------------------------------------
+    nuovaSquadra();
+    renderTecnici();
+    renderStateButtons();
+    addMaterialeRow();
+    aggiornaDisplayTimer();
+  </script>
+</body>
+</html>
