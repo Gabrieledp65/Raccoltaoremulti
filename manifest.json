@@ -1,0 +1,16 @@
+{
+  "name": "BST SRL - Rapporti Lavorazioni",
+  "short_name": "BST Rapporti",
+  "description": "Gestionale rapporti di lavorazione BST SRL: schede giornaliere, ore, trasferte e firme.",
+  "lang": "it",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#f1f5f9",
+  "theme_color": "#0f172a",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}
